@@ -1,6 +1,5 @@
 name: Publish to PyPI and create GH release
-variables:
-  CI_DEBUG_TRACE: "true"
+
 on:
   push:
     tags:
@@ -10,7 +9,6 @@ jobs:
     name: Build distribution
     runs-on: ubuntu-latest
 
-    
     steps:
     - uses: actions/checkout@v4
 
