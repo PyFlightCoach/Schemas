@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from flightanalysis import SchedDef
-from fatuning.scheduleinfo import ScheduleInfo
+from pydantic import BaseModel
+
+from pfcschemas.sinfo import ScheduleInfo
 
 
 class DirectionDefinition(BaseModel):
@@ -10,7 +11,9 @@ class DirectionDefinition(BaseModel):
     @staticmethod
     def from_sdef(sdef: SchedDef):
         manid = sdef.wind_def_manoeuvre()
-        return DirectionDefinition(manid=manid, direction=sdef[manid].info.start.direction.name)
+        return DirectionDefinition(
+            manid=manid, direction=sdef[manid].info.start.direction.name
+        )
 
 
 class SDefFile(BaseModel):
@@ -26,4 +29,3 @@ class SDefFile(BaseModel):
 
     def create_definition(self):
         return SchedDef.from_dict(self.mdefs)
-    

@@ -4,7 +4,7 @@ from pydantic import GetCoreSchemaHandler
 from typing import Any
 
 ##https://github.com/pydantic/pydantic/discussions/6466#discussioncomment-8219585
-class EnumStr(str, Enum):
+class EnumStr(float, Enum):
     @classmethod
     def __get_pydantic_core_schema__(
         cls, _source_type: Any, _handler: GetCoreSchemaHandler
@@ -25,6 +25,7 @@ class EnumStr(str, Enum):
             try:
                 return cls[v]
             except KeyError:
-                raise ValueError(f"Invalid {cls.__name__}: {v}")
+                return None
+#                raise ValueError(f"Invalid {cls.__name__}: {v}")
         else:
             raise ValueError(f"Unexpected type: {type(v)}")

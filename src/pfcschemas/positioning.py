@@ -86,3 +86,15 @@ class BoxLocation(BaseModel):
     height: Height
     direction: Direction | None = None
     orientation: Orientation | None = None
+
+
+def boxlocationmaker(
+    height: Height,
+    direction: Direction | None = None,
+    orientation: Orientation | None = None,
+):
+    return BoxLocation(
+        height=height,
+        direction=direction,
+        orientation=orientation,
+    )

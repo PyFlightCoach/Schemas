@@ -1,6 +1,11 @@
 from pfcschemas.positioning import BoxLocation, Height, Direction
 
 
+def test_enumstr():
+    h = Height.MID
+    assert h == Height.MID
+    assert h.value == 0.6
+
 
 def test_boxloc_serialize():
     bloc = BoxLocation(height=Height.MID, direction=Direction.UPWIND, orientation=None)
