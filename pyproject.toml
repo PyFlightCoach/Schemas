@@ -1,0 +1,26 @@
+[project]
+name = "pfcschemas"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Thomas David", email = "thomasdavid0@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.1.3",
+    "pandas>=2.2.3",
+    "pydantic>=2.9.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+]
+lint = [
+    "ruff>=0.7.3",
+]
