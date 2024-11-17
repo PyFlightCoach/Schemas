@@ -3,27 +3,19 @@ from __future__ import annotations
 import pandas as pd
 from pydantic import BaseModel
 
-from pfcschemas import fcj
-from pfcschemas.sinfo import ScheduleInfo
-from pfcschemas.maninfo import ManInfo
-
-class MDef(BaseModel):
-    info: ManInfo
-    mps: dict
-    eds: dict
-    box: dict
+from pfcschemas import fcj, ScheduleInfo, Direction
 
 
 class MA(BaseModel):
     name: str
     id: int
     schedule: ScheduleInfo
-    schedule_direction: str | None
+    schedule_direction: Direction | None
     flown: list[dict] | dict
 
     history: dict[str, fcj.ManResult] | None = None
 
-    mdef: MDef | None = None
+    mdef: dict | None = None
     manoeuvre: dict | None = None
     template: list[dict] | dict | None = None
     corrected: dict | None = None
@@ -39,9 +31,6 @@ class MA(BaseModel):
             flown=self.flown,
             history=self.history,
         )
-
-    def add_mdef(self, mdef: MDef) -> MA:
-        return MA(**(self.__dict__ | dict(mdef=mdef)))
 
     def simplify_history(self):
         vnames = [v[1:] if v.startswith("v") else v for v in self.history.keys()]

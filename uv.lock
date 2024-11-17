@@ -115,7 +115,7 @@ wheels = [
 
 [[package]]
 name = "pfcschemas"
-version = "0.1.0"
+version = "0.1.2.dev2+gea2418a.d20241113"
 source = { editable = "." }
 dependencies = [
     { name = "numpy" },

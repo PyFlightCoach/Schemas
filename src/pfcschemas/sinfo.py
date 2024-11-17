@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
-
+from pfcschemas import Direction
 
 fcj_categories = {
     "F3A FAI": "f3a",
@@ -32,6 +32,17 @@ class ManDetails:
     id: int
     k: float
     entry: Literal["UPWIND", "DOWNWIND", "CROSS"]
+
+    @staticmethod
+    def parse(m, i: int):
+        _m = m[0] if isinstance(m, list) else m
+
+        return ManDetails(
+            _m["info"]["short_name"],
+            i + 1,
+            _m["info"]["k"],
+            Direction.parse(_m["info"]["start"]["direction"]),
+        )
 
 
 @dataclass

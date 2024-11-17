@@ -1,19 +1,45 @@
-from flightanalysis import SchedDef
+
 from pydantic import BaseModel
 
 from pfcschemas.sinfo import ScheduleInfo
+from pfcschemas.positioning import Direction
+from pfcschemas.maninfo import ManInfo
+
+class MDef(BaseModel):
+    info: ManInfo
+    mps: dict
+    eds: dict
+    box: dict
+
+
+class MOption(BaseModel):
+    options: list[MDef]
+    active: int = 0
+
+    @property
+    def uid(self):
+        return self.options[0].info.short_name
+
+    @property
+    def info(self):
+        return self.options[self.active].info
+
+    @property
+    def mps(self):
+        return self.options[self.active].mps
+
+    @property
+    def eds(self):
+        return self.options[self.active].eds
+
+    def __iter__(self):
+        for mdef in self.options:
+            yield mdef
 
 
 class DirectionDefinition(BaseModel):
     manid: int
-    direction: str
-
-    @staticmethod
-    def from_sdef(sdef: SchedDef):
-        manid = sdef.wind_def_manoeuvre()
-        return DirectionDefinition(
-            manid=manid, direction=sdef[manid].info.start.direction.name
-        )
+    direction: Direction
 
 
 class SDefFile(BaseModel):
@@ -27,5 +53,3 @@ class SDefFile(BaseModel):
     def sinfo(self):
         return ScheduleInfo(self.category, self.schedule)
 
-    def create_definition(self):
-        return SchedDef.from_dict(self.mdefs)
