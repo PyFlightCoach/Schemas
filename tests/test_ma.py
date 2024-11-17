@@ -1,5 +1,5 @@
 from pytest import fixture
-from pfcschemas import MA
+from schemas import MA
 from pathlib import Path
 from json import load
 

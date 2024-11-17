@@ -1,9 +1,9 @@
 
 from pydantic import BaseModel
 
-from pfcschemas.sinfo import ScheduleInfo
-from pfcschemas.positioning import Direction
-from pfcschemas.maninfo import ManInfo
+from schemas.sinfo import ScheduleInfo
+from schemas.positioning import Direction
+from schemas.maninfo import ManInfo
 
 class MDef(BaseModel):
     info: ManInfo

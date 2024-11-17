@@ -1,11 +1,11 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from pfcschemas import fcj
+from schemas import fcj
 import pandas as pd
 from datetime import datetime
-from pfcschemas.utils.files import validate_json
-from pfcschemas.ma import MA
-from pfcschemas.sinfo import ScheduleInfo
+from schemas.utils.files import validate_json
+from schemas.ma import MA
+from schemas.sinfo import ScheduleInfo
 
 
 class AJson(BaseModel):

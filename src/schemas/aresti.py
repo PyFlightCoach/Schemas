@@ -1,4 +1,4 @@
-from pfcschemas.maninfo import ManInfo
+from schemas.maninfo import ManInfo
 from pydantic import BaseModel
 from typing import Any
 

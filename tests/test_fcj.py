@@ -1,4 +1,4 @@
-from pfcschemas import fcj
+from schemas import fcj
 from pathlib import Path
 
 

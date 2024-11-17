@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
-from pfcschemas import Direction
+from schemas import Direction
 
 fcj_categories = {
     "F3A FAI": "f3a",

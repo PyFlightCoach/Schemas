@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 from pydantic import BaseModel
 
-from pfcschemas import fcj, ScheduleInfo, Direction
+from schemas import fcj, ScheduleInfo, Direction
 
 
 class MA(BaseModel):

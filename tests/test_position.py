@@ -1,4 +1,4 @@
-from pfcschemas.positioning import BoxLocation, Height, Direction
+from schemas.positioning import BoxLocation, Height, Direction
 
 
 def test_enumstr():
