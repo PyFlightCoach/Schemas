@@ -62,11 +62,14 @@ def figure(
 
 
 class Option(BaseModel):
-    figures: list[Figure | list[Figure]]
+    figures: list[Figure]
 
+    @property
+    def info(self):
+        return self.figures[0].info
+    
 
-
-def option(figures: list[Figure | list[Figure]]) -> Option:
+def option(figures: list[Figure]) -> Option:
     return Option(figures=figures)
 
 

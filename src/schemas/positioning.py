@@ -2,7 +2,22 @@ import numpy as np
 from pydantic import BaseModel
 from typing import Annotated
 from .utils.enum import EnumStr
+import numpy as np
 
+
+class MBTags:
+    CENTRE = 0
+
+
+def centred(elb):
+    setattr(elb, "centred", True)
+    return elb
+
+c45 = np.cos(np.radians(45))
+
+
+def r(turns):
+    return (2 * np.pi * np.array(turns)).tolist()
 
 class Orientation(EnumStr):
     UPRIGHT = np.pi

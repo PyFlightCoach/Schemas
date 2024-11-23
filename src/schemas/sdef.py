@@ -45,7 +45,6 @@ class DirectionDefinition(BaseModel):
 class SDefFile(BaseModel):
     category: str
     schedule: str
-    direction_definition: DirectionDefinition
     fa_version: str
     mdefs: dict[str, dict | list[dict]]
 

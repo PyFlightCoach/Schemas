@@ -52,9 +52,7 @@ class ScheduleInfo:
 
     @staticmethod
     def from_str(fname):
-        if fname.endswith(".sdef"):
-            fname = fname[:-6]
-        info = fname.split("_")
+        info = fname.split('.')[0].split("_")
         if len(info) == 1:
             return ScheduleInfo("f3a", info[0].lower())
         else:
