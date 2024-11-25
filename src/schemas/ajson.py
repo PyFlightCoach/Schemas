@@ -6,6 +6,7 @@ from datetime import datetime
 from schemas.utils.files import validate_json
 from schemas.ma import MA
 from schemas.sinfo import ScheduleInfo
+from packaging.version import InvalidVersion, Version
 
 
 class AJson(BaseModel):
@@ -28,6 +29,16 @@ class AJson(BaseModel):
         for man in self.mans:
             versions |= set(man.history.keys())
         return list(versions)
+
+    def all_valid_versions(self):
+        valid_versions = []
+        for version in self.all_versions():
+            try:
+                Version(version)
+                valid_versions.append(version)
+            except InvalidVersion:
+                pass
+        return valid_versions
 
     def get_scores(self, version: str, props: fcj.ScoreProperties=None, group="total"):
         if props is None:
