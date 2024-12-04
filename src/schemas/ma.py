@@ -15,7 +15,7 @@ class MA(BaseModel):
 
     history: dict[str, fcj.ManResult] | None = None
 
-    mdef: dict | None = None
+    mdef: dict | list[dict] | None = None
     manoeuvre: dict | None = None
     template: list[dict] | dict | None = None
     corrected: dict | None = None
