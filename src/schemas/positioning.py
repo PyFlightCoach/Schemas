@@ -98,13 +98,13 @@ class Position(EnumStr):
 
 
 class BoxLocation(BaseModel):
-    height: Height
+    height: Height | None = None
     direction: Direction | None = None
     orientation: Orientation | None = None
 
 
 def boxlocationmaker(
-    height: Height,
+    height: Height | None = None,
     direction: Direction | None = None,
     orientation: Orientation | None = None,
 ):
