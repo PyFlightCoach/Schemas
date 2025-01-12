@@ -64,6 +64,15 @@ class Direction(EnumStr):
     DOWNWIND = -1
     CROSS = 0
 
+    @staticmethod
+    def parse_heading(heading: Heading, wind: Heading):
+        if heading == wind:
+            return Direction.DOWNWIND
+        elif heading in [Heading.INTOOUT, Heading.OUTTOIN]:
+            return Direction.CROSS
+        else:
+            return Direction.UPWIND
+
     def wind_swap_heading(self, d_or_w: Heading) -> int:
         match self:
             case Direction.UPWIND:
