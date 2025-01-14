@@ -33,6 +33,7 @@ class MA(BaseModel):
         )
 
     def simplify_history(self):
+        """Tidy up the analysis version naming"""
         vnames = [v[1:] if v.startswith("v") else v for v in self.history.keys()]
         vnames_old = vnames[::-1]
         vnids = [

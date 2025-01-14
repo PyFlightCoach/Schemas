@@ -60,6 +60,17 @@ class FCJ(BaseModel):
         except Exception:
             return None
 
+    @property
+    def origin(self):
+        return Origin(
+            lat=self.parameters.pilotLat,
+            lng=self.parameters.pilotLng,
+            alt=self.parameters.pilotAlt,
+            heading=self.parameters.rotation,
+            move_north=self.parameters.moveNorth,
+            move_east=self.parameters.moveEast,
+            move_down=self.parameters.elevate,
+        )
 
 class View(BaseModel):
     position: dict
@@ -194,3 +205,6 @@ class Origin(BaseModel):
     move_east: Annotated[float, "non-standard offset of box"]=0
     move_down: Annotated[float, "non-standard offset of box"]=0
     
+    @staticmethod
+    def zero():
+        return Origin(lat=0, lng=0, alt=0, heading=0)
