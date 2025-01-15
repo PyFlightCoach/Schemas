@@ -30,7 +30,15 @@ class MA(BaseModel):
             schedule_direction=self.schedule_direction,
             flown=self.flown,
             history=self.history,
+            mdef=self.mdef,
         )
+
+    def k_factored_score(self, props: fcj.ScoreProperties, version: str = "All") -> pd.Series | float:
+        k = self.mdef['info']['k']
+        if version in self.history.keys():
+            return self.history[version].get_score(props)  * k
+        else:
+            return pd.Series({k: v.get_score(props).total for k, v in self.history.items()}) * k
 
     def simplify_history(self):
         """Tidy up the analysis version naming"""

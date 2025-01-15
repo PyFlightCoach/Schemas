@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 import re
 
+import numpy as np
 import pandas as pd
 from pydantic import BaseModel
 from typing import Annotated
@@ -66,7 +67,7 @@ class FCJ(BaseModel):
             lat=self.parameters.pilotLat,
             lng=self.parameters.pilotLng,
             alt=self.parameters.pilotAlt,
-            heading=self.parameters.rotation,
+            heading=np.degrees(self.parameters.rotation),
             move_north=self.parameters.moveNorth,
             move_east=self.parameters.moveEast,
             move_down=self.parameters.elevate,

@@ -40,7 +40,10 @@ class AJson(BaseModel):
                 pass
         return valid_versions
 
-    def get_scores(self, version: str, props: fcj.ScoreProperties=None, group="total"):
+    def total_score(self, props: fcj.ScoreProperties, version: str = "All") -> pd.Series:
+        return pd.DataFrame({man.name: man.k_factored_score(props, version) for man in self.mans}).T.sum()
+        
+    def get_scores(self, version: str, props: fcj.ScoreProperties=None, group="total") -> pd.Series:
         if props is None:
             props = fcj.ScoreProperties()
         scores = {}
