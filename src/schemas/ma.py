@@ -30,7 +30,6 @@ class MA(BaseModel):
             schedule_direction=self.schedule_direction,
             flown=self.flown,
             history=self.history,
-            mdef=self.mdef,
         )
 
     def k_factored_score(self, props: fcj.ScoreProperties, version: str = "All") -> pd.Series | float:

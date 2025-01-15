@@ -17,6 +17,16 @@ class AJson(BaseModel):
     bootTime: datetime | None = None
     mans: list[MA]
 
+    def basic(self):
+        return AJson(
+            origin=self.origin,
+            isComp=self.isComp,
+            sourceBin=self.sourceBin,
+            sourceFCJ=self.sourceFCJ,
+            bootTime=self.bootTime,
+            mans=[m.basic() for m in self.mans]
+        )
+
     def schedule(self):
         schedules = [man.schedule for man in self.mans]
         if all([s == schedules[0] for s in schedules[1:]]):
@@ -49,7 +59,9 @@ class AJson(BaseModel):
         scores = {}
         for man in self.mans:
             if version in man.history:
-                scores[man.name] = man.history[version].get_score(props).__dict__[group]
+                score = man.history[version].get_score(props)
+                if score:
+                    scores[man.name] = score.__dict__[group]
         return pd.Series(scores, name=version)
 
     def create_score_df(
