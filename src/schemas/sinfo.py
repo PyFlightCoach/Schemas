@@ -6,9 +6,9 @@ from schemas import Direction
 fcj_categories = {
     "F3A FAI": "f3a",
     "F3A": "f3a",
-    "US AMA": "nsrca",
+    "US AMA": "ama",
     "F3A UK": "f3auk",
-    "F3A US": "nsrca",
+    "F3A US": "ama",
     "IMAC": "imac",
 }
 
@@ -18,6 +18,7 @@ fcj_schedules = {
     "P25": "p25",
     "F25": "f25",
     "Unlimited 2024": "unlimited2024",
+    "Intermediate 24": "intermediate2024",    
 }
 
 
@@ -74,9 +75,12 @@ class ScheduleInfo:
         return ScheduleInfo("na", "mixed")
 
     def fcj_to_pfc(self):
-        return ScheduleInfo(
+        sinfo = ScheduleInfo(
             lookup(self.category, fcj_categories), lookup(self.name, fcj_schedules)
         )
+        if sinfo.category == "ama" and sinfo.name == "Advanced 24":
+            sinfo = ScheduleInfo("f3a", "a25")
+        return sinfo
 
     def pfc_to_fcj(self):
         def rev_lookup(val, data):
