@@ -6,10 +6,10 @@ from pydantic import BaseModel
 class ManInfo(BaseModel):
     name: str
     short_name: str
-    k: float
-    position: Position
-    start: BoxLocation
-    end: BoxLocation
+    k: float = 0
+    position: Position | None = None
+    start: BoxLocation = BoxLocation()
+    end: BoxLocation = BoxLocation()
     centre_points: Annotated[
         list[int],
         "points that should be centered, ids correspond to the previous element",
