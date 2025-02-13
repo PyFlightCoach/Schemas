@@ -27,6 +27,13 @@ class AJson(BaseModel):
             mans=[m.basic() for m in self.mans]
         )
 
+    @property
+    def man_names(self):
+        return [m.info.short_name for m in self.mans]
+
+    def get_man(self, name):
+        return self.mans[self.man_names.index(name)]
+
     def schedule(self):
         schedules = [man.schedule for man in self.mans]
         if all([s == schedules[0] for s in schedules[1:]]):
