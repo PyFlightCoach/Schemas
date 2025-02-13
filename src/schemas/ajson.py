@@ -29,7 +29,7 @@ class AJson(BaseModel):
 
     @property
     def man_names(self):
-        return [m.info.short_name for m in self.mans]
+        return [m.name for m in self.mans]
 
     def get_man(self, name):
         return self.mans[self.man_names.index(name)]
