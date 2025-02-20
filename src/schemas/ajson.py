@@ -31,8 +31,10 @@ class AJson(BaseModel):
     def man_names(self):
         return [m.name for m in self.mans]
 
-    def get_man(self, name):
-        return self.mans[self.man_names.index(name)]
+    def get_man(self, id: str | int):
+        if isinstance(id, str):
+            id = self.man_names.index(id)
+        return self.mans[id]
 
     def schedule(self):
         schedules = [man.schedule for man in self.mans]
