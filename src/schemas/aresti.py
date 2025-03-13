@@ -78,5 +78,14 @@ class Sequence(BaseModel):
     rules: str
     figures: list[Figure | Option]
 
+    def __getitem__(self, name_or_id: str):
+        if isinstance(name_or_id, int):
+            return self.figures[name_or_id]
+        else:
+            for fig in self.figures:
+                if fig.info.short_name == name_or_id:
+                    return fig
+        raise KeyError(f"Figure {name_or_id} not found in sequence {self.name}")
+
 def sequence(name: str, rules: str, figures: list[Figure | Option]) -> Sequence:
     return Sequence(name=name, rules=rules, figures=figures)
