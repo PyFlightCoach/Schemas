@@ -137,8 +137,8 @@ class ManResult(BaseModel):
 
 class El(BaseModel):
     name: str
-    start: int
-    stop: int
+    start: float
+    stop: float
 
 
 class Score(BaseModel):

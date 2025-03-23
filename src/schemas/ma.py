@@ -22,6 +22,9 @@ class MA(BaseModel):
     corrected_template: list[dict] | dict | None = None
     scores: dict | None = None
 
+    def __repr__(self):
+        return f"MA({self.name}, {'Full' if self.mdef else 'Basic'}, {self.scores['score'] if self.scores else 'no scores'})"
+
     def basic(self):
         return MA(
             name=self.name,

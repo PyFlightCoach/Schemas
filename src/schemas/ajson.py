@@ -36,6 +36,9 @@ class AJson(BaseModel):
             id = self.man_names.index(id)
         return self.mans[id]
 
+    def __getitem__(self, id: str | int):
+        return self.get_man(id)
+
     def schedule(self):
         schedules = [man.schedule for man in self.mans]
         if all([s == schedules[0] for s in schedules[1:]]):
