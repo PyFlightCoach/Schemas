@@ -9,7 +9,7 @@ fcj_categories = {
     "US AMA": "ama",
     "F3A UK": "f3auk",
     "F3A US": "ama",
-    "IMAC": "imac",
+    "IMAC": "IMAC",
 }
 
 fcj_schedules = {
@@ -55,13 +55,13 @@ class ScheduleInfo:
     def from_str(fname):
         info = fname.split('.')[0].split("_")
         if len(info) == 1:
-            return ScheduleInfo("f3a", info[0].lower())
+            return ScheduleInfo("f3a", info[0])
         else:
-            return ScheduleInfo(info[0].lower(), info[1].lower())
+            return ScheduleInfo(info[0], info[1])
 
     def __str__(self):
-        return f"{self.category}_{self.name}".lower()
-
+        return f"{self.category}_{self.name}"
+    
     @staticmethod
     def lookupCategory(category):
         return lookup(category, fcj_categories)
@@ -105,22 +105,6 @@ class ScheduleInfo:
     @staticmethod
     def build(category, name):
         return ScheduleInfo(category.lower(), name.lower())
-
-    def manoeuvre_details(self) -> list[ManDetails]:
-        mds = []
-
-        for i, (k, v) in enumerate(self.json_data().items()):
-            if isinstance(v, list):
-                v = v[0]
-            mds.append(
-                ManDetails(
-                    v["info"]["short_name"],
-                    i + 1,
-                    v["info"]["k"],
-                    v["info"]["start"]["direction"],
-                )
-            )
-        return mds
 
     def __eq__(self, other: ScheduleInfo):
         return str(self.fcj_to_pfc()) == str(other.fcj_to_pfc())
