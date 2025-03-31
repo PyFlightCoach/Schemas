@@ -22,9 +22,15 @@ class MA(BaseModel):
     corrected_template: list[dict] | dict | None = None
     scores: dict | None = None
 
+    def __str__(self):
+        from schemas.fcj import ScoreProperties
+        scores = {k: v.get_score(ScoreProperties(difficulty=3, truncate=False)).total for k, v in self.history.items()}
+        scores = ",".join([f"{k}: {v:.2f}" for k, v in scores.items()]) 
+        return f"MA({self.name}, {'Full' if self.mdef else 'Basic'}, {scores})"
+    
     def __repr__(self):
-        return f"MA({self.name}, {'Full' if self.mdef else 'Basic'}, {self.scores['score'] if self.scores else 'no scores'})"
-
+        return str(self)
+    
     def basic(self):
         return MA(
             name=self.name,
