@@ -44,6 +44,10 @@ def stallturn(*args, **kwargs):
     return PE.build("stallturn", args, kwargs)
 
 
+def tailslide(*args, **kwargs):
+    return PE.build("tailslide", args, kwargs)
+
+
 def centred(_pe: PE) -> PE:
     return _pe.model_copy(update=dict(centred=True))
 
