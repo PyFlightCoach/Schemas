@@ -1,6 +1,6 @@
 [project]
 name = "PFCSchemas"
-version="v0.1.9"
+version="v0.1.10"
 description = "Pydantic schemas for the pyflightcoach libraries"
 readme = "README.md"
 authors = [{ name = "Thomas David", email = "thomasdavid0@gmail.com" }]
