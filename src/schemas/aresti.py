@@ -1,10 +1,10 @@
 from schemas.maninfo import ManInfo
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, Literal
 
 
 class PE(BaseModel):
-    kind: str
+    kind: Literal["line", "roll", "loop", "snap", "spin", "stallturn", "tailslide"]
     args: list[Any]
     kwargs: dict[str, Any]
     centred: bool = False
