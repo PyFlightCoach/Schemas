@@ -129,8 +129,10 @@ class ManResult(BaseModel):
             ),
         )
 
-    def get_score(self, props: ScoreProperties) -> ScoreValues | None:
-        return [r for r in self.results if r.properties==props][0].score if props else None
+    def get_score(self, props: ScoreProperties | None = None) -> ScoreValues | None:
+        if props is None:
+            props = ScoreProperties(difficulty=3, truncate=False)
+        return [r for r in self.results if r.properties==props][0].score
         
 
 class El(BaseModel):
