@@ -17,6 +17,9 @@ fcj_schedules = {
     "F23": "f23",
     "P25": "p25",
     "F25": "f25",
+    "P27": "p27",
+    "F27": "f27",
+    "A27": "a27",
     "Unlimited 2024": "unlimited2024",
     "Intermediate 24": "intermediate2024",    
 }
