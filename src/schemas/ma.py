@@ -11,7 +11,7 @@ class MA(BaseModel):
     name: str
     id: int
     schedule: ScheduleInfo
-    schedule_direction: Direction | None
+    schedule_direction: Direction | None = None
     flown: list[dict] | dict
 
     history: dict[str, fcj.ManResult] | None = None
