@@ -8,7 +8,7 @@ from .positioning import (
     BoxLocation,
     boxlocationmaker,
 )
-from .maninfo import ManInfo, maninfomaker
+from .maninfo import ManInfo
 from .sinfo import ScheduleInfo, ManDetails
 from .sdef import MDef, MOption, DirectionDefinition, SDefFile
 from .ma import MA
