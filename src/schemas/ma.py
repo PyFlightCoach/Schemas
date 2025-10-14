@@ -36,9 +36,17 @@ class MA(BaseModel):
     @property
     def latest_version(self):
         versions = list(self.history.keys())
-        if len(versions) == 0:
-            raise ValueError("No versions available in history")
-        return max(versions, key=Version)
+
+        def check_version(v):
+            try:
+                Version(v)
+                return True
+            except Exception as e:
+                return False
+
+        versions = [v for v in versions if check_version(v)]
+        
+        return max(versions, key=Version) if len(versions) else None
 
     def __str__(self):
         from schemas.fcj import ScoreProperties
@@ -86,5 +94,13 @@ class MA(BaseModel):
             )
         )
 
+    def rename_version(self, old_v: str, new_v: str):
+        if self.history and old_v in self.history:
+            new_history = self.history.copy()
+            del new_history[old_v]
+            new_history[new_v] = self.history[old_v]
+            return self.model_copy(update=dict(history = new_history))
+        else:
+            return self
 
 #        vids = [vnames.rindex(vn) for vn in set(vnames)]

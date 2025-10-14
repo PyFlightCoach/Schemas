@@ -113,7 +113,7 @@ class BoxLocation(BaseModel):
 
 
 def boxlocationmaker(
-    height: Height | None = None,
+    height: Height | None = Height.BTM,
     direction: Direction | None = None,
     orientation: Orientation | None = None,
 ):
