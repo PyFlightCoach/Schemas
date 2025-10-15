@@ -6,7 +6,6 @@ from .positioning import (
     Height,
     Position,
     BoxLocation,
-    boxlocationmaker,
 )
 from .maninfo import ManInfo
 from .sinfo import ScheduleInfo, ManDetails
