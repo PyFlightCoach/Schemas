@@ -81,7 +81,8 @@ class Sequence(BaseModel):
     name: str
     rules: str
     figures: list[Figure | Option]
-
+    parameters: dict[str, Any] = {}
+    
     def __getitem__(self, name_or_id: str):
         if isinstance(name_or_id, int):
             return self.figures[name_or_id]
