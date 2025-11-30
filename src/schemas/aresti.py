@@ -92,5 +92,11 @@ class Sequence(BaseModel):
                     return fig
         raise KeyError(f"Figure {name_or_id} not found in sequence {self.name}")
 
+    @property
+    def k_factors(self) -> dict[str, float]:
+        return {
+            fig.info.short_name: fig.info.k for fig in self.figures
+        }
+
 def sequence(name: str, rules: str, figures: list[Figure | Option]) -> Sequence:
     return Sequence(name=name, rules=rules, figures=figures)
