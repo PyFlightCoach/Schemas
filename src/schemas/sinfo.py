@@ -42,10 +42,10 @@ class ManDetails:
         _m = m[0] if isinstance(m, list) else m
 
         return ManDetails(
-            _m["info"]["short_name"],
+            _m.info.short_name,
             i + 1,
-            _m["info"]["k"],
-            Direction.parse(_m["info"]["start"]["direction"]),
+            _m.info.k,
+            _m.info.start.direction,
         )
 
 

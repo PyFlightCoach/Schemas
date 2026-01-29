@@ -2,7 +2,6 @@ import numpy as np
 from pydantic import BaseModel
 from typing import Annotated
 from .utils.enum import EnumStr
-import numpy as np
 
 
 class MBTags:
@@ -111,14 +110,16 @@ class BoxLocation(BaseModel):
     direction: Direction | None = None
     orientation: Orientation | None = None
 
+    @staticmethod
+    def build(
+        height: Height | None = Height.BTM,
+        direction: Direction | None = None,
+        orientation: Orientation | None = None,
+    ):
+        return BoxLocation(
+            height=height,
+            direction=direction,
+            orientation=orientation,
+        )
 
-def boxlocationmaker(
-    height: Height | None = None,
-    direction: Direction | None = None,
-    orientation: Orientation | None = None,
-):
-    return BoxLocation(
-        height=height,
-        direction=direction,
-        orientation=orientation,
-    )
+boxlocationmaker = BoxLocation.build

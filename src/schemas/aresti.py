@@ -14,7 +14,7 @@ class PE(BaseModel):
         return PE(kind=kind, args=args, kwargs=kwargs, centred=centred)
 
     def __str__(self):
-        pe = f"{self.kind}({','.join(self.args)}, {','.join([f'{k}={v}' for k,v in self.kwargs.items()])})"
+        pe = f"{self.kind}({','.join(self.args)}, {','.join([f'{k}={v}' for k, v in self.kwargs.items()])})"
         if self.centred:
             pe = f"centred({pe})"
         return pe
@@ -54,15 +54,26 @@ def centred(_pe: PE) -> PE:
 
 class Figure(BaseModel):
     info: ManInfo
-    elements: list[PE|int]
+    elements: list[PE | int]
     ndmps: dict[str, float | int | list]
     relax_back: bool = False
+    builder_options: dict[str, str] = {}
 
 
 def figure(
-    info: ManInfo, elements: list[PE], relax_back: bool = False, **kwargs
+    info: ManInfo,
+    elements: list[PE],
+    relax_back: bool = False,
+    options: dict = {},
+    **kwargs,
 ) -> Figure:
-    return Figure(info=info, elements=elements, ndmps=kwargs, relax_back=relax_back)
+    return Figure(
+        info=info,
+        elements=elements,
+        ndmps=kwargs,
+        relax_back=relax_back,
+        builder_options=options,
+    )
 
 
 class Option(BaseModel):
@@ -71,7 +82,11 @@ class Option(BaseModel):
     @property
     def info(self):
         return self.figures[0].info
-    
+
+    @property
+    def builder_options(self):
+        return self.figures[0].builder_options
+
 
 def option(figures: list[Figure]) -> Option:
     return Option(figures=figures)
@@ -81,6 +96,7 @@ class Sequence(BaseModel):
     name: str
     rules: str
     figures: list[Figure | Option]
+    options: dict[str, str] = {}
 
     def __getitem__(self, name_or_id: str):
         if isinstance(name_or_id, int):
@@ -91,5 +107,14 @@ class Sequence(BaseModel):
                     return fig
         raise KeyError(f"Figure {name_or_id} not found in sequence {self.name}")
 
-def sequence(name: str, rules: str, figures: list[Figure | Option]) -> Sequence:
-    return Sequence(name=name, rules=rules, figures=figures)
+    @property
+    def k_factors(self) -> dict[str, float]:
+        return {fig.info.short_name: fig.info.k for fig in self.figures}
+
+    @property
+    def builder_options(self) -> dict[str, str]:
+        return self.figures[0].builder_options
+
+
+def sequence(name: str, rules: str, figures: list[Figure | Option], options:  dict[str, str] = {}) -> Sequence:
+    return Sequence(name=name, rules=rules, figures=figures, options=options)

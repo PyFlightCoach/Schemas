@@ -69,9 +69,9 @@ class AJson(BaseModel):
         return list(versions)
 
     def latest_version(self):
-        versions = self.all_versions()
+        versions = self.all_valid_versions()
         if not versions:
-            raise ValueError("No valid versions found in manoeuvres")
+            return None
         return max(versions, key=Version)
 
     def all_valid_versions(self):
@@ -118,7 +118,7 @@ class AJson(BaseModel):
         if props is None:
             props = fcj.ScoreProperties(difficulty=3, truncate=False)
         if version == "All":
-            versions = self.all_versions()
+            versions = self.all_valid_versions()
         elif version == "Latest":
             versions = [self.latest_version()]
         else:
@@ -149,6 +149,9 @@ class AJson(BaseModel):
                 for man in self.mans
             ]
         )
+
+    def rename_version(self, old_v: str, new_v:str):
+        return self.model_copy(update=dict(mans=[m.rename_version(old_v, new_v) for m in self.mans]))
 
     @staticmethod
     def parse_json(json: dict | str):

@@ -16,7 +16,7 @@ class FCJ(BaseModel):
     view: View
     parameters: Parameters
     scored: bool
-    scores: list[float]
+    scores: list[float | None]
     human_scores: list[HumanResult] = []
     fcs_scores: list[Result] = []
     mans: list[Man]
@@ -165,7 +165,7 @@ class ScoreProperties(BaseModel):
 
 class Man(BaseModel):
     name: str
-    k: float
+    k: float = None
     id: str
     sp: int
     wd: float
