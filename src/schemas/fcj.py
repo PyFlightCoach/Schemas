@@ -186,7 +186,7 @@ class Data(BaseModel):
     N: float
     E: float
     D: float
-    time: int
+    time: float
     roll: float
     pitch: float
     yaw: float
