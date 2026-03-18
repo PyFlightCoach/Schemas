@@ -76,6 +76,11 @@ class MA(BaseModel):
         else:
             return pd.Series({k: v.get_score(props).total for k, v in self.history.items()}) * self.k
 
+    @property
+    def score(self):
+        return self.history[self.latest_version()].get_score()
+
+
     def simplify_history(self):
         """Tidy up the analysis version naming"""
         vnames = [v[1:] if v.startswith("v") else v for v in self.history.keys()]
