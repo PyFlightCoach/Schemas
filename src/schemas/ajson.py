@@ -55,13 +55,17 @@ class AJson(BaseModel):
     def k_factors(self):
         return [m.k for m in self]
 
-    def schedule(self):
+    def schedule(self, allow_multiple=False):
         schedules = [man.schedule for man in self.mans]
         if all([s == schedules[0] for s in schedules[1:]]):
             return schedules[0].fcj_to_pfc()
         else:
-            return ScheduleInfo.mixed()
-
+            if allow_multiple:
+                schedules = set([str(sinfo) for sinfo in schedules])
+                return [ScheduleInfo.from_str(s) for s in schedules]
+            else:
+                return ScheduleInfo.mixed()
+            
     def all_versions(self):
         versions = set()
         for man in self.mans:
