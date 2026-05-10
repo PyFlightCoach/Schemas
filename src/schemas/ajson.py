@@ -40,6 +40,7 @@ class AJson(BaseModel):
         return [m.name for m in self.mans]
 
     def get_man(self, id: str | int):
+        """if id is an int the numbering starts from zero"""
         if isinstance(id, str):
             id = self.man_names.index(id)
         return self.mans[id]
