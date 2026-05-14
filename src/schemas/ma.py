@@ -109,3 +109,84 @@ class MA(BaseModel):
             return self
 
 #        vids = [vnames.rindex(vn) for vn in set(vnames)]
+
+    def summarise_dgs(self, group: Literal["intra", "inter", "positioning", "all"] = "all"):
+        dfs = []
+        if group == "intra" or group == "all":
+            dfs.append(self.summarise_intra_dgs())
+        if group == "inter" or group == "all":
+            dfs.append(self.summarise_inter_dgs())
+        if group == "positioning" or group == "all":
+            dfs.append(self.summarise_positioning_dgs())
+        return pd.concat(dfs, axis=0, ignore_index=True)
+
+    def summarise_intra_dgs(self):
+
+        if self.scores is None:
+            raise ValueError("No scores available to summarise")
+        
+        odata = []
+        for el, results in self.scores['intra']['data'].items():
+            for dg, result in results['data'].items():
+                for i, v in enumerate(result['dgs']):
+                    odata.append({
+                        "kind": "intra",
+                        "manoeuvre": self.name,
+                        "k": self.k,
+                        "element": el,
+                        "downgrade": dg,
+                        "unit": result['measurement']["unit"],
+                        "criteria": result["criteria"]["name"],
+                        "criteria_kind": result["criteria"]["kind"],
+                        "factor": result["criteria"]['lookup']["factor"],
+                        "exponent": result["criteria"]['lookup']["exponent"],
+                        "error": result['errors'][i],
+                        "dg": v,
+                    })
+        return pd.DataFrame(odata)
+    
+    def summarise_inter_dgs(self):
+        
+        if self.scores is None:
+            raise ValueError("No scores available to summarise")
+        
+        odata = []
+        for dg, result in self.scores['inter']['data'].items():
+                for i, v in enumerate(result['dgs']):
+                    odata.append({
+                        "kind": "inter",
+                        "manoeuvre": self.name,
+                        "k": self.k,
+                        "downgrade": dg,
+                        "unit": result['measurement']["unit"],
+                        "criteria": result["criteria"]["name"],
+                        "criteria_kind": result["criteria"]["kind"],
+                        "factor": result["criteria"]['lookup']["factor"],
+                        "exponent": result["criteria"]['lookup']["exponent"],
+                        "error": result['errors'][i],
+                        "dg": v,
+                    })
+        return pd.DataFrame(odata)
+    
+    def summarise_positioning_dgs(self):
+        
+        if self.scores is None:
+            raise ValueError("No scores available to summarise")
+        
+        odata = []
+        for dg, result in self.scores['positioning']['data'].items():
+                for i, v in enumerate(result['dgs']):
+                    odata.append({
+                        "kind": "positioning",
+                        "manoeuvre": self.name,
+                        "k": self.k,
+                        "downgrade": dg,
+                        "unit": result['measurement']["unit"],
+                        "criteria": result["criteria"]["name"],
+                        "criteria_kind": result["criteria"]["kind"],
+                        "factor": result["criteria"]['lookup']["factor"],
+                        "exponent": result["criteria"]['lookup']["exponent"],
+                        "error": result['errors'][i],
+                        "dg": v,
+                    })
+        return pd.DataFrame(odata)

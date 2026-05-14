@@ -66,7 +66,7 @@ class AJson(BaseModel):
                 return [ScheduleInfo.from_str(s) for s in schedules]
             else:
                 return ScheduleInfo.mixed()
-            
+
     def all_versions(self):
         versions = set()
         for man in self.mans:
@@ -155,9 +155,23 @@ class AJson(BaseModel):
             ]
         )
 
-    def rename_version(self, old_v: str, new_v:str):
-        return self.model_copy(update=dict(mans=[m.rename_version(old_v, new_v) for m in self.mans]))
+    def rename_version(self, old_v: str, new_v: str):
+        return self.model_copy(
+            update=dict(mans=[m.rename_version(old_v, new_v) for m in self.mans])
+        )
 
     @staticmethod
     def parse_json(json: dict | str):
         return AJson.model_validate(validate_json(json))
+
+    @property
+    def is_full(self):
+        return all([ma.scores is not None for ma in self.mans])
+
+    def summarise_dgs(
+        self, group: Literal["intra", "inter", "positioning", "all"] = "all"
+    ) -> pd.DataFrame:
+
+        return pd.concat(
+            [ma.summarise_dgs(group) for ma in self.mans], axis=0, ignore_index=True
+        )
