@@ -7,6 +7,7 @@ from schemas import fcj, ScheduleInfo, Direction
 
 type FAVersion = Literal["All", "Latest"] | str
 
+
 class MA(BaseModel):
     name: str
     id: int
@@ -27,9 +28,9 @@ class MA(BaseModel):
     @property
     def k(self) -> float:
         if isinstance(self.mdef, dict):
-            return self.mdef['info']['k']
+            return self.mdef["info"]["k"]
         elif isinstance(self.mdef, list) and len(self.mdef) > 0:
-            return self.mdef[0]['info']['k']
+            return self.mdef[0]["info"]["k"]
         else:
             raise ValueError("No k factor available")
 
@@ -45,18 +46,22 @@ class MA(BaseModel):
                 return False
 
         versions = [v for v in versions if check_version(v)]
-        
+
         return max(versions, key=Version) if len(versions) else None
 
     def __str__(self):
         from schemas.fcj import ScoreProperties
-        scores = {k: v.get_score(ScoreProperties(difficulty=3, truncate=False)).total for k, v in self.history.items()}
-        scores = ",".join([f"{k}: {v:.2f}" for k, v in scores.items()]) 
+
+        scores = {
+            k: v.get_score(ScoreProperties(difficulty=3, truncate=False)).total
+            for k, v in self.history.items()
+        }
+        scores = ",".join([f"{k}: {v:.2f}" for k, v in scores.items()])
         return f"MA({self.name}, {'Full' if self.mdef else 'Basic'}, {scores})"
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def basic(self, mdef: dict | list[dict] | None = None) -> MA:
         return MA(
             name=self.name,
@@ -65,21 +70,30 @@ class MA(BaseModel):
             schedule_direction=self.schedule_direction,
             flown=self.flown,
             history=self.history,
-            mdef=mdef
+            mdef=mdef,
         )
 
-    def k_factored_score(self, props: fcj.ScoreProperties=None, version: FAVersion="All") -> pd.Series | float:        
+    def k_factored_score(
+        self, props: fcj.ScoreProperties = None, version: FAVersion = "All"
+    ) -> pd.Series | float:
         if version in self.history.keys():
-            return self.history[version].get_score(props).total  * self.k
-        elif version=="Latest":
-            return self.history[max(list(self.history.keys()))].get_score(props).total * self.k
+            return self.history[version].get_score(props).total * self.k
+        elif version == "Latest":
+            return (
+                self.history[max(list(self.history.keys()))].get_score(props).total
+                * self.k
+            )
         else:
-            return pd.Series({k: v.get_score(props).total for k, v in self.history.items()}) * self.k
+            return (
+                pd.Series(
+                    {k: v.get_score(props).total for k, v in self.history.items()}
+                )
+                * self.k
+            )
 
     @property
     def score(self):
         return self.history[self.latest_version()].get_score()
-
 
     def simplify_history(self):
         """Tidy up the analysis version naming"""
@@ -104,13 +118,15 @@ class MA(BaseModel):
             new_history = self.history.copy()
             del new_history[old_v]
             new_history[new_v] = self.history[old_v]
-            return self.model_copy(update=dict(history = new_history))
+            return self.model_copy(update=dict(history=new_history))
         else:
             return self
 
-#        vids = [vnames.rindex(vn) for vn in set(vnames)]
+    #        vids = [vnames.rindex(vn) for vn in set(vnames)]
 
-    def summarise_dgs(self, group: Literal["intra", "inter", "positioning", "all"] = "all"):
+    def summarise_dgs(
+        self, group: Literal["intra", "inter", "positioning", "all"] = "all"
+    ):
         dfs = []
         if group == "intra" or group == "all":
             dfs.append(self.summarise_intra_dgs())
@@ -120,73 +136,77 @@ class MA(BaseModel):
             dfs.append(self.summarise_positioning_dgs())
         return pd.concat(dfs, axis=0, ignore_index=True)
 
-    def summarise_intra_dgs(self):
+    def summarise_intra_dgs(self) -> pd.DataFrame:
 
         if self.scores is None:
             raise ValueError("No scores available to summarise")
-        
-        odata = []
-        for el, results in self.scores['intra']['data'].items():
-            for dg, result in results['data'].items():
-                for i, v in enumerate(result['dgs']):
-                    odata.append({
-                        "kind": "intra",
-                        "manoeuvre": self.name,
-                        "k": self.k,
-                        "element": el,
-                        "downgrade": dg,
-                        "unit": result['measurement']["unit"],
-                        "criteria": result["criteria"]["name"],
-                        "criteria_kind": result["criteria"]["kind"],
-                        "factor": result["criteria"]['lookup']["factor"],
-                        "exponent": result["criteria"]['lookup']["exponent"],
-                        "error": result['errors'][i],
-                        "dg": v,
-                    })
-        return pd.DataFrame(odata)
-    
-    def summarise_inter_dgs(self):
-        
+
+        odfs = []
+        for el, results in self.scores["intra"]["data"].items():
+            if len(results["data"]) == 0:
+                continue
+            odfs.append(
+                summarise_results(
+                    results["data"],
+                ).assign(
+                    kind="intra",
+                    manoeuvre=self.name,
+                    k=self.k,
+                    element=el,
+                )
+            )
+        return pd.concat(odfs, axis=0, ignore_index=True)
+
+    def summarise_inter_dgs(self) -> pd.DataFrame:
+
         if self.scores is None:
             raise ValueError("No scores available to summarise")
-        
-        odata = []
-        for dg, result in self.scores['inter']['data'].items():
-                for i, v in enumerate(result['dgs']):
-                    odata.append({
-                        "kind": "inter",
-                        "manoeuvre": self.name,
-                        "k": self.k,
-                        "downgrade": dg,
-                        "unit": result['measurement']["unit"],
-                        "criteria": result["criteria"]["name"],
-                        "criteria_kind": result["criteria"]["kind"],
-                        "factor": result["criteria"]['lookup']["factor"],
-                        "exponent": result["criteria"]['lookup']["exponent"],
-                        "error": result['errors'][i],
-                        "dg": v,
-                    })
-        return pd.DataFrame(odata)
-    
-    def summarise_positioning_dgs(self):
-        
+
+        inter_df: pd.DataFrame = summarise_results(self.scores["inter"]["data"])
+        inter_df = inter_df.assign(
+            kind="inter",
+            manoeuvre=self.name,
+            k=self.k,
+        )
+        return inter_df
+
+    def summarise_positioning_dgs(self) -> pd.DataFrame:
+
         if self.scores is None:
             raise ValueError("No scores available to summarise")
-        
-        odata = []
-        for dg, result in self.scores['positioning']['data'].items():
-                for i, v in enumerate(result['dgs']):
-                    odata.append({
-                        "kind": "positioning",
-                        "manoeuvre": self.name,
-                        "k": self.k,
-                        "downgrade": dg,
-                        "unit": result['measurement']["unit"],
-                        "criteria": result["criteria"]["name"],
-                        "criteria_kind": result["criteria"]["kind"],
-                        "factor": result["criteria"]['lookup']["factor"],
-                        "exponent": result["criteria"]['lookup']["exponent"],
-                        "error": result['errors'][i],
-                        "dg": v,
-                    })
-        return pd.DataFrame(odata)
+
+        positioning_df: pd.DataFrame = summarise_results(
+            self.scores["positioning"]["data"]
+        )
+        return positioning_df.assign(
+            kind="positioning",
+            manoeuvre=self.name,
+            k=self.k,
+        )
+
+
+def summarise_results(results: dict) -> pd.DataFrame:
+
+    odfs = []
+    for name, result in results.items():
+        # dgs.get(name)['collectors'].keys())
+        odfs.append(pd.DataFrame(summarise_result(result)).assign(downgrade=name))
+    return pd.concat(odfs, axis=0, ignore_index=True)
+
+
+def summarise_result(result: dict) -> pd.DataFrame:
+    odata = []
+    for i, v in enumerate(result["dgs"]):
+        odata.append(
+            {
+                "kind": "positioning",
+                "unit": result["measurement"]["unit"],
+                "criteria": result["criteria"]["name"],
+                "criteria_kind": result["criteria"]["kind"],
+                "factor": result["criteria"]["lookup"]["factor"],
+                "exponent": result["criteria"]["lookup"]["exponent"],
+                "error": result["errors"][i],
+                "dg": v,
+            }
+        )
+    return pd.DataFrame(odata)
