@@ -161,7 +161,8 @@ class MA(BaseModel):
 
         if self.scores is None:
             raise ValueError("No scores available to summarise")
-
+        if len(self.scores["inter"]["data"]) == 0:
+            return pd.DataFrame()
         inter_df: pd.DataFrame = summarise_results(self.scores["inter"]["data"])
         inter_df = inter_df.assign(
             kind="inter",
@@ -174,7 +175,8 @@ class MA(BaseModel):
 
         if self.scores is None:
             raise ValueError("No scores available to summarise")
-
+        if len(self.scores["positioning"]["data"]) == 0:
+            return pd.DataFrame()
         positioning_df: pd.DataFrame = summarise_results(
             self.scores["positioning"]["data"]
         )
