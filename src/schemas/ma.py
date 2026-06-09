@@ -17,6 +17,7 @@ class MA(BaseModel):
 
     history: dict[str, fcj.ManResult] | None = None
 
+    option: int | None = None
     mdef: dict | list[dict] | None = None
     manoeuvre: dict | list[dict] | None = None
     template: list[dict] | dict | None = None
@@ -70,6 +71,7 @@ class MA(BaseModel):
             schedule_direction=self.schedule_direction,
             flown=self.flown,
             history=self.history,
+            option=self.option,
             mdef=mdef,
         )
 
@@ -103,13 +105,9 @@ class MA(BaseModel):
             len(vnames) - vnames_old.index(vn) - 1
             for vn in list(pd.Series(vnames).unique())
         ]
-
-        return MA(
-            **(
-                self.__dict__
-                | dict(
-                    history={vnames[i]: list(self.history.values())[i] for i in vnids}
-                )
+        return self.model_copy(
+            update=dict(
+                history={vnames[i]: list(self.history.values())[i] for i in vnids}
             )
         )
 
