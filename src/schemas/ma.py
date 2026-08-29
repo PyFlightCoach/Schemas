@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 from typing import Literal
+
 import pandas as pd
-from pydantic import BaseModel
 from packaging.version import Version
-from schemas import fcj, ScheduleInfo, Direction
+from pydantic import BaseModel
+
+from schemas import Direction, ScheduleInfo, fcj
 
 type FAVersion = Literal["All", "Latest"] | str
 

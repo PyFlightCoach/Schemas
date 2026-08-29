@@ -10,7 +10,6 @@ from pydantic import BaseModel
 
 from schemas import fcj
 from schemas.ma import MA, FAVersion
-
 from schemas.sinfo import ScheduleInfo
 from schemas.utils.files import validate_json
 
