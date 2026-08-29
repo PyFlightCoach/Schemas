@@ -93,6 +93,42 @@ class MA(BaseModel):
                 * self.k
             )
 
+    def splits_from_version(self, version: str) -> list[str] | None:
+        """The flown data contains element labelling, replace it with the labelling in the
+        history for the requested version.
+        """
+        assert version in self.history.keys() or version == "Latest", (
+            f"Version {version} not found in history"
+        )
+        if version == "Latest":
+            version = self.latest_version
+        els = self.history[version].els
+
+        if isinstance(self.flown, list) or (
+            isinstance(self.flown, dict) and "data" in self.flown
+        ):
+            data = self.flown.data if isinstance(self.flown, dict) else self.flown
+            df = pd.DataFrame.from_dict(data)
+
+            for el in els:
+                df.loc[(df.t >= el.start) & (df.t <= el.stop), "element"] = el.name
+
+            data = df.to_dict(orient="records")
+        else:
+            data = None
+
+        if isinstance(self.flown, dict):
+            _new = self.flown.copy()
+            _new["data"] = data
+            _new["labels"] = {
+                "element": {
+                    el.name: {"start": el.start, "stop": el.stop} for el in els
+                }
+            }
+            return _new
+        else:
+            return data
+
     @property
     def score(self):
         return self.history[self.latest_version()].get_score()
