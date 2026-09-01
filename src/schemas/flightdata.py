@@ -1,36 +1,37 @@
 from __future__ import annotations
 
-from typing import Literal
-
 import pandas as pd
-from pydantic import BaseModel, RootModel
-
-
-class NewBinData(BaseModel):
-    contents: Literal["bindata"]
-    filename: str | None = None
-    data: dict[str, BinField]
-    source: Literal["web_legacy", "web_compressed", "web_array"]
-
-class BinField(RootModel[dict[str, float] | list[float | str]]):
-    pass
+from pydantic import BaseModel, ConfigDict, RootModel
 
 type LegacyBinColumn = dict[str, float] | list[float | str]
 
-class LegacyBinData(RootModel[dict[str, LegacyBinColumn]]):
-    pass
-
-
 class CompressedBinColumn(BaseModel):
+    model_config = ConfigDict(serialize_defaults=False)
     format: str
     multiplier: float
     length: int
     type: str
     data: str
 
+class BinField(RootModel[LegacyBinColumn | CompressedBinColumn]):
+    model_config = ConfigDict(serialize_defaults=False)
+
+class NewBinData(BaseModel):
+    model_config = ConfigDict(serialize_defaults=False)
+    filename: str | None = None
+    data: dict[str, BinField]
+
+
+class LegacyBinData(RootModel[dict[str, BinField]]):
+    model_config = ConfigDict(serialize_defaults=False)
+
+
+class BinData(RootModel[LegacyBinData | NewBinData]):
+    model_config = ConfigDict(serialize_defaults=False)
+
 
 class NewState(BaseModel):
-    contents: Literal["statedata"]
+    model_config = ConfigDict(serialize_defaults=False)
     t: list[float]
     labels: LabelGroups | None = None    
     data: LegacyState | None = None
@@ -45,6 +46,7 @@ class NewState(BaseModel):
         return pd.DataFrame(self.data.df())
 
 class Label(BaseModel):
+    model_config = ConfigDict(serialize_defaults=False)
     start: float
     stop: float
     sublabels: dict[str, dict[str, Label]] | None = None
@@ -56,6 +58,7 @@ class LabelGroups(RootModel[dict[str, LabelGroup]]):
     pass
 
 class LegacyStateRow(BaseModel):
+    model_config = ConfigDict(serialize_defaults=False)
     t: float
     dt: float
     x: float
@@ -87,6 +90,9 @@ class LegacyState(RootModel[list[LegacyStateRow]]):
     def parse_df(df: pd.DataFrame):
         return LegacyState.model_validate(df.to_dict(orient="records"))
 
+
+class State(RootModel[NewState | LegacyState]):
+    pass
 
 class Point(BaseModel):
     x: DataArray

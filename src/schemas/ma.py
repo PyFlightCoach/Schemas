@@ -7,7 +7,7 @@ from packaging.version import Version
 from pydantic import BaseModel
 
 from schemas.fcj import ManResult, ScoreProperties
-from schemas.flightdata import LegacyState, NewState, State
+from schemas.flightdata import LegacyState, NewState
 from schemas.positioning import Direction
 from schemas.sinfo import ScheduleInfo
 
@@ -19,17 +19,17 @@ class MA(BaseModel):
     id: int
     schedule: ScheduleInfo
     schedule_direction: Direction | None = None
-    flown: State
+    flown: NewState | LegacyState
 
     history: dict[str, ManResult] | None = None
 
     option: int | None = None
     mdef: dict | list[dict] | None = None
     manoeuvre: dict | list[dict] | None = None
-    template: State | None = None
-    templates: dict[str, State] | None = None
+    template: NewState | LegacyState | None = None
+    templates: dict[str, NewState | LegacyState] | None = None
     corrected: dict | None = None
-    corrected_template: State | None = None
+    corrected_template: NewState | LegacyState | None = None
     scores: dict | None = None
 
     @property

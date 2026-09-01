@@ -25,10 +25,12 @@ from .fcj import Result as Result
 from .fcj import Score as Score
 from .fcj import ScoreProperties as ScoreProperties
 from .fcj import ScoreValues as ScoreValues
+from .flightdata import BinData as BinData
 from .flightdata import LegacyBinData as LegacyBinData
 from .flightdata import LegacyState as LegacyState
 from .flightdata import NewBinData as NewBinData
 from .flightdata import NewState as NewState
+from .flightdata import State as State
 from .ma import MA as MA
 from .maninfo import ManInfo as ManInfo
 from .positioning import BoxLocation as BoxLocation
