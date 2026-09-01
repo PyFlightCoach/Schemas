@@ -48,8 +48,7 @@ class AJson(BaseModel):
         return self.get_man(id)
 
     def __iter__(self):
-        for man in self.mans:
-            yield man
+        yield from self.mans
 
     @property
     def k_factors(self):
@@ -57,11 +56,11 @@ class AJson(BaseModel):
 
     def schedule(self, allow_multiple=False):
         schedules = [man.schedule for man in self.mans]
-        if all([s == schedules[0] for s in schedules[1:]]):
+        if all(s == schedules[0] for s in schedules[1:]):
             return schedules[0].fcj_to_pfc()
         else:
             if allow_multiple:
-                schedules = set([str(sinfo) for sinfo in schedules])
+                schedules = {str(sinfo) for sinfo in schedules}
                 return [ScheduleInfo.from_str(s) for s in schedules]
             else:
                 return ScheduleInfo.mixed()
@@ -146,17 +145,15 @@ class AJson(BaseModel):
         )
 
     def check_version(self, version: str):
-        version = version[1:] if version.startswith("v") else version
+        version = version.removeprefix("v")
         return all(
-            [
-                man.history is not None and version in man.history.keys()
+            man.history is not None and version in man.history
                 for man in self.mans
-            ]
         )
 
     def rename_version(self, old_v: str, new_v: str):
         return self.model_copy(
-            update=dict(mans=[m.rename_version(old_v, new_v) for m in self.mans])
+            update={"mans": [m.rename_version(old_v, new_v) for m in self.mans]}
         )
 
     @staticmethod
@@ -165,7 +162,7 @@ class AJson(BaseModel):
 
     @property
     def is_full(self):
-        return all([ma.scores is not None for ma in self.mans])
+        return all(ma.scores is not None for ma in self.mans)
 
     def summarise_dgs(
         self, group: Literal["intra", "inter", "positioning", "all"] = "all"

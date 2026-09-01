@@ -1,31 +1,47 @@
-from .utils import validate_json, EnumStr 
-from .positioning import (
-    Heading,
-    Direction,
-    Orientation,
-    Height,
-    Position,
-    BoxLocation,
-)
-from .maninfo import ManInfo
-from .sinfo import ScheduleInfo, ManDetails
-from .sdef import MDef, MOption, DirectionDefinition, SDefFile
-from .ma import MA
-from .ajson import AJson
-from .aresti import (
-    Sequence,
-    sequence,
-    Figure,
-    figure,
-    Option,
-    option,
-    PE,
-    line,
-    loop,
-    option,
-    roll,
-    snap,
-    spin,
-    stallturn,
-    centred
-)
+from schemas import fcj as fcj
+from schemas import flightdata as flightdata
+from schemas import positioning as positioning
+
+from .ajson import AJson as AJson
+from .aresti import PE as PE
+from .aresti import Figure as Figure
+from .aresti import Option as Option
+from .aresti import Sequence as Sequence
+from .aresti import centred as centred
+from .aresti import figure as figure
+from .aresti import line as line
+from .aresti import loop as loop
+from .aresti import option as option
+from .aresti import roll as roll
+from .aresti import sequence as sequence
+from .aresti import snap as snap
+from .aresti import spin as spin
+from .aresti import stallturn as stallturn
+from .fcj import FCJ as FCJ
+from .fcj import El as El
+from .fcj import ManResult as ManResult
+from .fcj import Origin as Origin
+from .fcj import Result as Result
+from .fcj import Score as Score
+from .fcj import ScoreProperties as ScoreProperties
+from .fcj import ScoreValues as ScoreValues
+from .flightdata import LegacyBinData as LegacyBinData
+from .flightdata import LegacyState as LegacyState
+from .flightdata import NewBinData as NewBinData
+from .flightdata import NewState as NewState
+from .ma import MA as MA
+from .maninfo import ManInfo as ManInfo
+from .positioning import BoxLocation as BoxLocation
+from .positioning import Direction as Direction
+from .positioning import Heading as Heading
+from .positioning import Height as Height
+from .positioning import Orientation as Orientation
+from .positioning import Position as Position
+from .sdef import DirectionDefinition as DirectionDefinition
+from .sdef import MDef as MDef
+from .sdef import MOption as MOption
+from .sdef import SDefFile as SDefFile
+from .sinfo import ManDetails as ManDetails
+from .sinfo import ScheduleInfo as ScheduleInfo
+from .utils import EnumStr as EnumStr
+from .utils import validate_json as validate_json

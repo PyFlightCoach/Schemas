@@ -6,7 +6,10 @@ import pandas as pd
 from packaging.version import Version
 from pydantic import BaseModel
 
-from schemas import Direction, ScheduleInfo, fcj
+from schemas.fcj import ManResult, ScoreProperties
+from schemas.flightdata import LegacyState, NewState, State
+from schemas.positioning import Direction
+from schemas.sinfo import ScheduleInfo
 
 type FAVersion = Literal["All", "Latest"] | str
 
@@ -16,17 +19,17 @@ class MA(BaseModel):
     id: int
     schedule: ScheduleInfo
     schedule_direction: Direction | None = None
-    flown: list[dict] | dict
+    flown: State
 
-    history: dict[str, fcj.ManResult] | None = None
+    history: dict[str, ManResult] | None = None
 
     option: int | None = None
     mdef: dict | list[dict] | None = None
     manoeuvre: dict | list[dict] | None = None
-    template: list[dict] | dict | None = None
-    templates: list[dict] | dict | None = None
+    template: State | None = None
+    templates: dict[str, State] | None = None
     corrected: dict | None = None
-    corrected_template: list[dict] | dict | None = None
+    corrected_template: State | None = None
     scores: dict | None = None
 
     @property
@@ -54,8 +57,7 @@ class MA(BaseModel):
         return max(versions, key=Version) if len(versions) else None
 
     def __str__(self):
-        from schemas.fcj import ScoreProperties
-
+        
         scores = {
             k: v.get_score(ScoreProperties(difficulty=3, truncate=False)).total
             for k, v in self.history.items()
@@ -79,9 +81,9 @@ class MA(BaseModel):
         )
 
     def k_factored_score(
-        self, props: fcj.ScoreProperties = None, version: FAVersion = "All"
+        self, props: ScoreProperties = None, version: FAVersion = "All"
     ) -> pd.Series | float:
-        if version in self.history.keys():
+        if version in self.history:
             return self.history[version].get_score(props).total * self.k
         elif version == "Latest":
             return (
@@ -100,35 +102,31 @@ class MA(BaseModel):
         """The flown data contains element labelling, replace it with the labelling in the
         history for the requested version.
         """
-        assert version in self.history.keys() or version == "Latest", (
+        assert version in self.history or version == "Latest", (
             f"Version {version} not found in history"
         )
         if version == "Latest":
             version = self.latest_version
         els = self.history[version].els
 
-        if isinstance(self.flown, list) or (
-            isinstance(self.flown, dict) and "data" in self.flown
-        ):
-            data = self.flown.data if isinstance(self.flown, dict) else self.flown
-            df = pd.DataFrame.from_dict(data)
+        if isinstance(self.flown, LegacyState) or (self.flown.data is not None):
+            df = self.flown.df()
 
             for el in els:
                 df.loc[(df.t >= el.start) & (df.t <= el.stop), "element"] = el.name
 
-            data = df.to_dict(orient="records")
+            data = LegacyState.parse_df(df)
         else:
             data = None
 
-        if isinstance(self.flown, dict):
-            _new = self.flown.copy()
-            _new["data"] = data
-            _new["labels"] = {
-                "element": {
-                    el.name: {"start": el.start, "stop": el.stop} for el in els
-                }
-            }
-            return _new
+        if isinstance(self.flown, NewState):
+            return self.flown.model_copy(update={
+                "labels": {
+                    "element": self.history[version].label_group()
+                },
+                "data": data
+            })
+
         else:
             return data
 
@@ -138,16 +136,16 @@ class MA(BaseModel):
 
     def simplify_history(self):
         """Tidy up the analysis version naming"""
-        vnames = [v[1:] if v.startswith("v") else v for v in self.history.keys()]
+        vnames = [v.removeprefix("v") for v in self.history]
         vnames_old = vnames[::-1]
         vnids = [
             len(vnames) - vnames_old.index(vn) - 1
             for vn in list(pd.Series(vnames).unique())
         ]
         return self.model_copy(
-            update=dict(
-                history={vnames[i]: list(self.history.values())[i] for i in vnids}
-            )
+            update={
+                "history": {vnames[i]: list(self.history.values())[i] for i in vnids}
+            }
         )
 
     def rename_version(self, old_v: str, new_v: str):
@@ -155,7 +153,7 @@ class MA(BaseModel):
             new_history = self.history.copy()
             del new_history[old_v]
             new_history[new_v] = self.history[old_v]
-            return self.model_copy(update=dict(history=new_history))
+            return self.model_copy(update={"history": new_history})
         else:
             return self
 

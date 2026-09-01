@@ -1,9 +1,9 @@
-
 from pydantic import BaseModel
 
-from schemas.sinfo import ScheduleInfo
-from schemas.positioning import Direction
 from schemas.maninfo import ManInfo
+from schemas.positioning import Direction
+from schemas.sinfo import ScheduleInfo
+
 
 class MDef(BaseModel):
     info: ManInfo
@@ -51,4 +51,3 @@ class SDefFile(BaseModel):
     @property
     def sinfo(self):
         return ScheduleInfo(self.category, self.schedule)
-

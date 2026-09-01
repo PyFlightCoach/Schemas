@@ -1,6 +1,8 @@
+from typing import Annotated
+
 import numpy as np
 from pydantic import BaseModel
-from typing import Annotated
+
 from .utils.enum import EnumStr
 
 
@@ -9,7 +11,7 @@ class MBTags:
 
 
 def centred(elb):
-    setattr(elb, "centred", True)
+    elb.centred = True
     return elb
 
 c45 = np.cos(np.radians(45))
@@ -46,8 +48,7 @@ class Heading(EnumStr):
         for head in Heading.__members__.values():
             if check(bearing, head):
                 return head
-        else:
-            raise ValueError(f"Invalid bearing {bearing}")
+        raise ValueError(f"Invalid bearing {bearing}")
 
     def reverse(self):
         return {

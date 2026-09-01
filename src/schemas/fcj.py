@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import datetime
 import re
+from typing import Annotated
 
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel
-from typing import Annotated
+
+from schemas.flightdata import Label, LabelGroup
 
 
 class FCJ(BaseModel):
@@ -73,6 +75,7 @@ class FCJ(BaseModel):
             move_down=self.parameters.elevate,
         )
 
+
 class View(BaseModel):
     position: dict
     target: dict
@@ -132,8 +135,13 @@ class ManResult(BaseModel):
     def get_score(self, props: ScoreProperties | None = None) -> ScoreValues | None:
         if props is None:
             props = ScoreProperties(difficulty=3, truncate=False)
-        return [r for r in self.results if r.properties==props][0].score
-        
+        return next(r for r in self.results if r.properties == props).score
+
+    def label_group(self) -> LabelGroup:
+        labels = {
+            el.name: {"start": el.start, "stop": el.stop} for el in self.els
+        }
+        return LabelGroup.model_validate(labels)
 
 class El(BaseModel):
     name: str
@@ -201,11 +209,11 @@ class Origin(BaseModel):
     lat: Annotated[float, "latitude in degrees"]
     lng: Annotated[float, "latitude in degrees"]
     alt: Annotated[float, "height AMSL in meters"]
-    heading: Annotated[float, "heading (direction of box Y axis) in degrees from North"] 
-    move_north: Annotated[float, "non-standard offset of box"]=0
-    move_east: Annotated[float, "non-standard offset of box"]=0
-    move_down: Annotated[float, "non-standard offset of box"]=0
-    
+    heading: Annotated[float, "heading (direction of box Y axis) in degrees from North"]
+    move_north: Annotated[float, "non-standard offset of box"] = 0
+    move_east: Annotated[float, "non-standard offset of box"] = 0
+    move_down: Annotated[float, "non-standard offset of box"] = 0
+
     @staticmethod
     def zero():
         return Origin(lat=0, lng=0, alt=0, heading=0)

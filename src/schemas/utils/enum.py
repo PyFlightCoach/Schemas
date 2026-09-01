@@ -1,7 +1,9 @@
 from enum import Enum
-from pydantic_core import CoreSchema, core_schema
-from pydantic import GetCoreSchemaHandler
 from typing import Any
+
+from pydantic import GetCoreSchemaHandler
+from pydantic_core import CoreSchema, core_schema
+
 
 ##https://github.com/pydantic/pydantic/discussions/6466#discussioncomment-8219585
 class EnumStr(float, Enum):
