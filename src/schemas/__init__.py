@@ -26,6 +26,9 @@ from .fcj import Score as Score
 from .fcj import ScoreProperties as ScoreProperties
 from .fcj import ScoreValues as ScoreValues
 from .flightdata import BinData as BinData
+from .flightdata import Label as Label
+from .flightdata import LabelGroup as LabelGroup
+from .flightdata import LabelGroups as LabelGroups
 from .flightdata import LegacyBinData as LegacyBinData
 from .flightdata import LegacyState as LegacyState
 from .flightdata import NewBinData as NewBinData
