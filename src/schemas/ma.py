@@ -4,12 +4,13 @@ from typing import Literal
 
 import pandas as pd
 from packaging.version import Version
-from pydantic import BaseModel
 
 from schemas.fcj import ManResult, ScoreProperties
-from schemas.flightdata import LegacyState, NewState
+from schemas.flightdata import LabelGroups, LegacyState, NewState
 from schemas.positioning import Direction
 from schemas.sinfo import ScheduleInfo
+
+from .base import CustomBaseModel as BaseModel
 
 type FAVersion = Literal["All", "Latest"] | str
 
@@ -98,37 +99,42 @@ class MA(BaseModel):
                 * self.k
             )
 
-    def splits_from_version(self, version: str) -> list[str] | None:
-        """The flown data contains element labelling, replace it with the labelling in the
-        history for the requested version.
-        """
-        assert version in self.history or version == "Latest", (
+    def splits_from_version(self, version: str) -> LegacyState | NewState | None:
+        assert version in self.history or version.lower() == "latest", (
             f"Version {version} not found in history"
         )
-        if version == "Latest":
+
+        if version.lower() == "latest":
             version = self.latest_version
+
         els = self.history[version].els
 
-        if isinstance(self.flown, LegacyState) or (self.flown.data is not None):
+        if isinstance(self.flown, LegacyState) or self.flown.data is not None:
             df = self.flown.df()
 
             for el in els:
-                df.loc[(df.t >= el.start) & (df.t <= el.stop), "element"] = el.name
+                df.loc[
+                    (df.t >= el.start) & (df.t <= el.stop),
+                    "element",
+                ] = el.name
 
             data = LegacyState.parse_df(df)
         else:
             data = None
 
         if isinstance(self.flown, NewState):
-            return self.flown.model_copy(update={
-                "labels": {
-                    "element": self.history[version].label_group()
-                },
-                "data": data
+            labels = LabelGroups.model_validate({
+                "element": self.history[version].label_group()
             })
 
-        else:
-            return data
+            return self.flown.model_copy(
+                update={
+                    "labels": labels,
+                    "data": data,
+                }
+            )
+
+        return data
 
     @property
     def score(self):

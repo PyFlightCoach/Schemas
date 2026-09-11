@@ -6,9 +6,10 @@ from typing import Annotated
 
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel
 
-from schemas.flightdata import Label, LabelGroup
+from schemas.flightdata import LabelGroup
+
+from .base import CustomBaseModel as BaseModel
 
 
 class FCJ(BaseModel):

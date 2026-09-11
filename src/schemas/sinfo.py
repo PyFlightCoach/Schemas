@@ -27,7 +27,7 @@ fcj_schedules = {
 
 def lookup(val, data):
     val = val.replace("_", " ")
-    return data[val] if val in data else val
+    return data.get(val, val)
 
 
 @dataclass

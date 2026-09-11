@@ -1,8 +1,8 @@
-from pydantic import BaseModel
-
 from schemas.maninfo import ManInfo
 from schemas.positioning import Direction
 from schemas.sinfo import ScheduleInfo
+
+from .base import CustomBaseModel as BaseModel
 
 
 class MDef(BaseModel):
@@ -33,8 +33,7 @@ class MOption(BaseModel):
         return self.options[self.active].eds
 
     def __iter__(self):
-        for mdef in self.options:
-            yield mdef
+        yield from self.options
 
 
 class DirectionDefinition(BaseModel):

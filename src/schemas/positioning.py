@@ -1,8 +1,8 @@
 from typing import Annotated
 
 import numpy as np
-from pydantic import BaseModel
 
+from .base import CustomBaseModel as BaseModel
 from .utils.enum import EnumStr
 
 

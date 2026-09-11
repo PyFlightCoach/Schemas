@@ -6,12 +6,13 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel
 
 from schemas import fcj
 from schemas.ma import MA, FAVersion
 from schemas.sinfo import ScheduleInfo
 from schemas.utils.files import validate_json
+
+from .base import CustomBaseModel as BaseModel
 
 
 class AJson(BaseModel):

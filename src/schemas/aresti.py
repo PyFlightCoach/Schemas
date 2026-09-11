@@ -1,6 +1,8 @@
-from schemas.maninfo import ManInfo
-from pydantic import BaseModel
 from typing import Any, Literal
+
+from schemas.maninfo import ManInfo
+
+from .base import CustomBaseModel as BaseModel
 
 
 class PE(BaseModel):

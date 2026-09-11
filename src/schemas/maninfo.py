@@ -1,6 +1,9 @@
-from .positioning import Position, BoxLocation
-from typing import Tuple, Annotated
-from pydantic import BaseModel
+from typing import Annotated
+
+from pydantic import Field
+
+from .base import CustomBaseModel as BaseModel
+from .positioning import BoxLocation, Position
 
 
 class ManInfo(BaseModel):
@@ -13,10 +16,10 @@ class ManInfo(BaseModel):
     centre_points: Annotated[
         list[int],
         "points that should be centered, ids correspond to the previous element",
-    ] = []
+    ] = Field(default_factory=list)
     centred_els: Annotated[
-        list[Tuple[int, float]], "element ids that should be centered"
-    ] = []
+        list[tuple[int, float]], "element ids that should be centered"
+    ] = Field(default_factory=list)
 
     def to_dict(self):
         return self.model_dump()
@@ -34,11 +37,11 @@ class ManInfo(BaseModel):
         start: BoxLocation,
         end: BoxLocation,
         centre_points: Annotated[
-            list[int],
+            list[int] | None,
             "points that should be centered, ids correspond to the previous element",
         ] = None,
         centred_els: Annotated[
-            list[Tuple[int, float]], "element ids that should be centered"
+            list[tuple[int, float]] | None, "element ids that should be centered"
         ] = None,
     ):
         return ManInfo(

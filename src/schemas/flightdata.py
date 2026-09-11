@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic import RootModel
+
+from .base import CustomBaseModel as BaseModel
 
 type LegacyBinColumn = dict[str, float] | list[float | str]
 
 class CompressedBinColumn(BaseModel):
-    model_config = ConfigDict(serialize_defaults=False)
     format: str
     multiplier: float
     length: int
@@ -14,24 +15,22 @@ class CompressedBinColumn(BaseModel):
     data: str
 
 class BinField(RootModel[LegacyBinColumn | CompressedBinColumn]):
-    model_config = ConfigDict(serialize_defaults=False)
+    pass
 
 class NewBinData(BaseModel):
-    model_config = ConfigDict(serialize_defaults=False)
     filename: str | None = None
     data: dict[str, BinField]
 
 
 class LegacyBinData(RootModel[dict[str, BinField]]):
-    model_config = ConfigDict(serialize_defaults=False)
+    pass
 
 
 class BinData(RootModel[LegacyBinData | NewBinData]):
-    model_config = ConfigDict(serialize_defaults=False)
+    pass
 
 
 class NewState(BaseModel):
-    model_config = ConfigDict(serialize_defaults=False)
     t: list[float]
     labels: LabelGroups | None = None    
     data: LegacyState | None = None
@@ -46,7 +45,6 @@ class NewState(BaseModel):
         return pd.DataFrame(self.data.df())
 
 class Label(BaseModel):
-    model_config = ConfigDict(serialize_defaults=False)
     start: float
     stop: float
     sublabels: dict[str, dict[str, Label]] | None = None
@@ -58,7 +56,6 @@ class LabelGroups(RootModel[dict[str, LabelGroup]]):
     pass
 
 class LegacyStateRow(BaseModel):
-    model_config = ConfigDict(serialize_defaults=False)
     t: float
     dt: float
     x: float
@@ -82,7 +79,7 @@ class LegacyStateRow(BaseModel):
 
 
 class LegacyState(RootModel[list[LegacyStateRow]]):
-
+    
     def df(self):
         return pd.DataFrame(self.model_dump())
 
@@ -93,6 +90,7 @@ class LegacyState(RootModel[list[LegacyStateRow]]):
 
 class State(RootModel[NewState | LegacyState]):
     pass
+    
 
 class Point(BaseModel):
     x: DataArray
