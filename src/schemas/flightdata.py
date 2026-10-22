@@ -5,7 +5,6 @@ from pydantic import RootModel
 
 from .base import CustomBaseModel as BaseModel
 
-type LegacyBinColumn = dict[str, float] | list[float | str]
 
 class CompressedBinColumn(BaseModel):
     format: str
@@ -14,12 +13,23 @@ class CompressedBinColumn(BaseModel):
     type: str
     data: str
 
-class BinField(RootModel[LegacyBinColumn | CompressedBinColumn]):
+
+class BinField(
+    RootModel[
+        dict[
+            str,
+            dict[str, float | None]
+            | list[float | str | None | CompressedBinColumn],
+        ]
+    ]
+):
     pass
 
+
 class NewBinData(BaseModel):
-    filename: str | None = None
     data: dict[str, BinField]
+    filename: str | None = None
+    source: str | None = None
 
 
 class LegacyBinData(RootModel[dict[str, BinField]]):
@@ -32,7 +42,7 @@ class BinData(RootModel[LegacyBinData | NewBinData]):
 
 class NewState(BaseModel):
     t: list[float]
-    labels: LabelGroups | None = None    
+    labels: LabelGroups | None = None
     data: LegacyState | None = None
     splines: dict | None = None
     pos: Point | None = None
@@ -44,16 +54,20 @@ class NewState(BaseModel):
     def df(self):
         return pd.DataFrame(self.data.df())
 
+
 class Label(BaseModel):
     start: float
     stop: float
     sublabels: dict[str, dict[str, Label]] | None = None
 
+
 class LabelGroup(RootModel[dict[str, Label]]):
     pass
 
+
 class LabelGroups(RootModel[dict[str, LabelGroup]]):
     pass
+
 
 class LegacyStateRow(BaseModel):
     t: float
@@ -79,7 +93,6 @@ class LegacyStateRow(BaseModel):
 
 
 class LegacyState(RootModel[list[LegacyStateRow]]):
-    
     def df(self):
         return pd.DataFrame(self.model_dump())
 
@@ -90,17 +103,19 @@ class LegacyState(RootModel[list[LegacyStateRow]]):
 
 class State(RootModel[NewState | LegacyState]):
     pass
-    
+
 
 class Point(BaseModel):
     x: DataArray
     y: DataArray
     z: DataArray
 
+
 class Quaternion(BaseModel):
     w: DataArray
     x: DataArray
     y: DataArray
     z: DataArray
+
 
 type DataArray = list[float] | str
