@@ -58,7 +58,7 @@ class MA(BaseModel):
         return max(versions, key=Version) if len(versions) else None
 
     def __str__(self):
-        
+
         scores = {
             k: v.get_score(ScoreProperties(difficulty=3, truncate=False)).total
             for k, v in self.history.items()
@@ -123,9 +123,9 @@ class MA(BaseModel):
             data = None
 
         if isinstance(self.flown, NewState):
-            labels = LabelGroups.model_validate({
-                "element": self.history[version].label_group()
-            })
+            labels = LabelGroups.model_validate(
+                {"element": self.history[version].label_group()}
+            )
 
             return self.flown.model_copy(
                 update={
@@ -183,20 +183,19 @@ class MA(BaseModel):
             raise ValueError("No scores available to summarise")
 
         odfs = []
-        for el, results in self.scores["intra"]["data"].items():
-            if len(results["data"]) == 0:
-                continue
-            odfs.append(
-                summarise_results(
-                    results["data"],
-                ).assign(
-                    kind="intra",
-                    manoeuvre=self.name,
-                    k=self.k,
-                    element=el,
-                )
-            )
-        return pd.concat(odfs, axis=0, ignore_index=True)
+        if self.scores is None:
+            raise ValueError("No scores available to summarise")
+        if len(self.scores["intra"]["data"]) == 0:
+            return pd.DataFrame()
+        intra_df = summarise_results(
+            self.scores["intra"]["data"],
+        ).assign(
+            kind="intra",
+            manoeuvre=self.name,
+            k=self.k,
+        )
+
+        return intra_df
 
     def summarise_inter_dgs(self) -> pd.DataFrame:
 
