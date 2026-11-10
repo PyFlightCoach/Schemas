@@ -14,7 +14,8 @@ def test_boxloc_serialize():
 
     assert bloc_dict["height"] == "MID"
     assert bloc_dict["direction"] == "UPWIND"
-    assert bloc_dict["orientation"] is None
+    # orientation=None is the default, so exclude_defaults omits it
+    assert "orientation" not in bloc_dict
 
 
 
