@@ -4,10 +4,11 @@ from typing import Literal
 
 import pandas as pd
 from packaging.version import Version
+from pydantic import field_validator
 
 from schemas.fcj import ManResult, ScoreProperties
 from schemas.flightdata import LabelGroups, LegacyState, NewState
-from schemas.positioning import Direction
+from schemas.positioning import Heading
 from schemas.sinfo import ScheduleInfo
 
 from .base import CustomBaseModel as BaseModel
@@ -19,7 +20,7 @@ class MA(BaseModel):
     name: str
     id: int
     schedule: ScheduleInfo
-    schedule_direction: Direction | None = None
+    schedule_direction: Heading | None = None
     flown: NewState | LegacyState
 
     history: dict[str, ManResult] | None = None
@@ -32,6 +33,20 @@ class MA(BaseModel):
     corrected: dict | None = None
     corrected_template: NewState | LegacyState | None = None
     scores: dict | None = None
+
+    @field_validator("schedule_direction", mode="before")
+    @classmethod
+    def _check_schedule_direction(cls, v):
+        """The schedule direction is the heading of the first upwind or downwind
+        manoeuvre, stored by name ("LTOR" or "RTOL"). Empty and "Infer" mean the
+        direction is inferred per manoeuvre, so they load as None."""
+        if v is None or v in ("", "Infer"):
+            return None
+        if isinstance(v, Heading):
+            v = v.name
+        if v not in ("LTOR", "RTOL"):
+            raise ValueError(f"Invalid schedule_direction: {v!r}")
+        return Heading[v]
 
     @property
     def k(self) -> float:
