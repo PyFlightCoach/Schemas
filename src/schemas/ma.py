@@ -88,7 +88,7 @@ class MA(BaseModel):
             return self.history[version].get_score(props).total * self.k
         elif version == "Latest":
             return (
-                self.history[max(list(self.history.keys()))].get_score(props).total
+                self.history[self.latest_version].get_score(props).total
                 * self.k
             )
         else:
@@ -138,7 +138,7 @@ class MA(BaseModel):
 
     @property
     def score(self):
-        return self.history[self.latest_version()].get_score()
+        return self.history[self.latest_version].get_score()
 
     def simplify_history(self):
         """Tidy up the analysis version naming"""
