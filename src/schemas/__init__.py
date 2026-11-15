@@ -5,6 +5,7 @@ from schemas import positioning as positioning
 from .ajson import AJson as AJson
 from .aresti import PE as PE
 from .aresti import Figure as Figure
+from .aresti import NewComparison as NewComparison
 from .aresti import Option as Option
 from .aresti import Sequence as Sequence
 from .aresti import centred as centred

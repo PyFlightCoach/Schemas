@@ -90,3 +90,17 @@ def test_definition_options_select_info_parameters_and_elements_without_mutating
     assert SDefFile.model_validate_json(schedule.model_dump_json()) == schedule
     direction = DirectionDefinition(manid=3, direction=Direction.DOWNWIND)
     assert direction.model_dump() == {"manid": 3, "direction": "DOWNWIND"}
+
+
+def test_figure_ndmps_carry_new_comparison_parameters_and_keep_plain_values():
+    wire = {
+        "info": info("a", 2).to_dict(),
+        "elements": [],
+        "ndmps": {"radius": 35, "roll_option": [[1.0], [-1.0]], "top_line": {"value": 40, "like": "line_length"}},
+    }
+    fig = aresti.Figure.model_validate(wire)
+    assert fig.ndmps["radius"] == 35
+    assert fig.ndmps["roll_option"] == [[1.0], [-1.0]]
+    assert fig.ndmps["top_line"] == aresti.NewComparison(value=40, like="line_length")
+    assert aresti.Figure.model_validate_json(fig.model_dump_json()) == fig
+    assert fig.model_dump()["ndmps"]["top_line"] == {"value": 40.0, "like": "line_length"}

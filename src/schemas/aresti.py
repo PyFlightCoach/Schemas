@@ -54,10 +54,22 @@ def centred(_pe: PE) -> PE:
     return _pe.model_copy(update=dict(centred=True))
 
 
+class NewComparison(BaseModel):
+    """A comparison parameter that the rules do not define, added to one figure.
+
+    It is judged like the existing comparison parameter named by ``like``, whose criteria,
+    unit and visibility it copies, with ``value`` as its default.
+    """
+
+    value: float
+    like: str
+
+
 class Figure(BaseModel):
     info: ManInfo
     elements: list[PE | int]
-    ndmps: dict[str, float | int | list]
+    # A value for a rule parameter, a combination's options (list), or a new comparison parameter.
+    ndmps: dict[str, float | int | list | NewComparison]
     relax_back: bool = False
     builder_options: dict[str, str] = {}
 
