@@ -106,6 +106,15 @@ def option(figures: list[Figure]) -> Option:
     return Option(figures=figures)
 
 
+def parse_figure(data: dict) -> Figure | Option:
+    """Validate a stored Aresti payload, which is an Option when it holds ``figures``.
+
+    The database stores a manoeuvre with combination options as ``{"figures": [...]}``
+    rather than as a single figure.
+    """
+    return Option.model_validate(data) if "figures" in data else Figure.model_validate(data)
+
+
 class Sequence(BaseModel):
     name: str
     rules: str

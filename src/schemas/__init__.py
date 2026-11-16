@@ -13,6 +13,7 @@ from .aresti import figure as figure
 from .aresti import line as line
 from .aresti import loop as loop
 from .aresti import option as option
+from .aresti import parse_figure as parse_figure
 from .aresti import roll as roll
 from .aresti import sequence as sequence
 from .aresti import snap as snap
