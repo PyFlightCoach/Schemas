@@ -38,6 +38,8 @@ from .flightdata import NewState as NewState
 from .flightdata import State as State
 from .ma import MA as MA
 from .maninfo import ManInfo as ManInfo
+from .maninfo import SequencePosition as SequencePosition
+from .maninfo import sequence_position as sequence_position
 from .positioning import BoxLocation as BoxLocation
 from .positioning import Direction as Direction
 from .positioning import Heading as Heading

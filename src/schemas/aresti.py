@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from schemas.maninfo import ManInfo
+from schemas.maninfo import ManInfo, SequencePosition, sequence_position
 
 from .base import CustomBaseModel as BaseModel
 
@@ -73,6 +73,12 @@ class Figure(BaseModel):
     relax_back: bool = False
     builder_options: dict[str, str] = {}
 
+    def at_position(self, position: SequencePosition | None) -> "Figure":
+        """A copy of the figure placed at ``position`` in its sequence."""
+        return self.model_copy(
+            update={"info": self.info.model_copy(update={"sequence_position": position})}
+        )
+
 
 def figure(
     info: ManInfo,
@@ -100,6 +106,10 @@ class Option(BaseModel):
     @property
     def builder_options(self):
         return self.figures[0].builder_options
+
+    def at_position(self, position: SequencePosition | None) -> "Option":
+        """A copy of the option with every figure placed at ``position`` in its sequence."""
+        return Option(figures=[f.at_position(position) for f in self.figures])
 
 
 def option(figures: list[Figure]) -> Option:
@@ -129,6 +139,19 @@ class Sequence(BaseModel):
                 if fig.info.short_name == name_or_id:
                     return fig
         raise KeyError(f"Figure {name_or_id} not found in sequence {self.name}")
+
+    def positioned(self) -> "Sequence":
+        """A copy with each figure's ``info.sequence_position`` set from its place in
+        the sequence (the sequence is authoritative over any stored position)."""
+        n = len(self.figures)
+        return self.model_copy(
+            update={
+                "figures": [
+                    f.at_position(sequence_position(i, n))
+                    for i, f in enumerate(self.figures)
+                ]
+            }
+        )
 
     @property
     def k_factors(self) -> dict[str, float]:
