@@ -28,6 +28,7 @@ from .fcj import Score as Score
 from .fcj import ScoreProperties as ScoreProperties
 from .fcj import ScoreValues as ScoreValues
 from .flightdata import BinData as BinData
+from .handover import apply_line_handover as apply_line_handover
 from .flightdata import Label as Label
 from .flightdata import LabelGroup as LabelGroup
 from .flightdata import LabelGroups as LabelGroups

@@ -127,7 +127,7 @@ class ManResult(BaseModel):
 
     def to_df(self) -> pd.DataFrame:
         return pd.DataFrame(
-            data=[res.score.__dict__ for res in self.results],
+            data=[res.score.model_dump() for res in self.results],
             index=pd.MultiIndex.from_frame(
                 pd.DataFrame([res.properties.__dict__ for res in self.results])
             ),
@@ -160,6 +160,12 @@ class ScoreValues(BaseModel):
     inter: float
     positioning: float
     total: float
+    # Raw components, written by analysis versions that hand the line between figures on to
+    # the next figure (IMAC, IAC): the untruncated intra without the handed-on downgrades and
+    # the untruncated handed-on downgrades. `intra` and `total` are the finished figure score
+    # once the sequence function (schemas.handover) has run. Missing in older versions.
+    intra_own: float | None = None
+    handover: float | None = None
 
 
 class ScoreProperties(BaseModel):

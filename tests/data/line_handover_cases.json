@@ -1,0 +1,1030 @@
+{
+ "version": 1,
+ "description": "Cases for the sequence function that hands the line between figures on to the next figure (schemas.handover.apply_line_handover). Each figure has a schedule, a 1-based number in it and its stored score rows for one analysis version (null: no scores, a failed figure). `expected` has, per figure, the intra and total of each row after the function (null: unchanged). Rows carrying intra_own and handover are recomputed; rows without them are left as stored. A sequence restarts when the schedule changes or the number does not follow the previous one.",
+ "cases": [
+  {
+   "name": "hands_on_to_the_next_figure",
+   "note": "Each figure gets the previous figure's handover. The first gets 0 and the last figure's own handover is dropped.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.4,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.6,
+       "intra_own": 1.0,
+       "handover": 0.4
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.8,
+       "inter": 0.5,
+       "positioning": 0.0,
+       "total": 8.7,
+       "intra_own": 0.5,
+       "handover": 0.3
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.15,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.85,
+       "intra_own": 0.25,
+       "handover": 0.9
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.9,
+      "total": 8.6
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.55,
+      "total": 9.45
+     }
+    ]
+   ]
+  },
+  {
+   "name": "truncated_rows",
+   "note": "Truncated rows round the new intra down to the half point; inter and positioning are the stored truncated values.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 2.0,
+       "inter": 1.0,
+       "positioning": 0.5,
+       "total": 6.5,
+       "intra_own": 1.74,
+       "handover": 0.26
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 1.0,
+       "inter": 0.5,
+       "positioning": 0.0,
+       "total": 8.5,
+       "intra_own": 0.99,
+       "handover": 0.49
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.5,
+       "total": 9.0,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 1.5,
+      "total": 7.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 1.0,
+      "total": 8.5
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.0
+     }
+    ]
+   ]
+  },
+  {
+   "name": "half_point_boundaries",
+   "note": "Values exactly on and just below a half point.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.0,
+       "handover": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 1.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.0,
+       "intra_own": 0.999,
+       "handover": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 4,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 1.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.0,
+       "intra_own": 1.0,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 0.0,
+      "total": 10.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 1.5,
+      "total": 8.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "total_is_floored_at_zero",
+   "note": "A large handed-on downgrade cannot take the total below zero.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 11.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 0,
+       "intra_own": 2.0,
+       "handover": 9.0
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 3.0,
+       "inter": 1.0,
+       "positioning": 0.5,
+       "total": 5.5,
+       "intra_own": 3.0,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 2.0,
+      "total": 8.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 12.0,
+      "total": 0
+     }
+    ]
+   ]
+  },
+  {
+   "name": "every_difficulty_and_truncation_uses_its_own_row",
+   "note": "Row i of a figure takes the handover of the same difficulty and truncation of the figure before.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 1,
+       "truncate": false,
+       "intra": 0.7,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.3,
+       "intra_own": 0.5,
+       "handover": 0.2
+      },
+      {
+       "difficulty": 1,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.2
+      },
+      {
+       "difficulty": 2,
+       "truncate": false,
+       "intra": 1.1,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.9,
+       "intra_own": 0.7,
+       "handover": 0.4
+      },
+      {
+       "difficulty": 2,
+       "truncate": true,
+       "intra": 1.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.0,
+       "intra_own": 0.7,
+       "handover": 0.4
+      },
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.5,
+       "intra_own": 0.9,
+       "handover": 0.6
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 1.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.5,
+       "intra_own": 0.9,
+       "handover": 0.6
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 1,
+       "truncate": false,
+       "intra": 0.3,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.7,
+       "intra_own": 0.3,
+       "handover": 0.0
+      },
+      {
+       "difficulty": 1,
+       "truncate": true,
+       "intra": 0.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 10.0,
+       "intra_own": 0.3,
+       "handover": 0.0
+      },
+      {
+       "difficulty": 2,
+       "truncate": false,
+       "intra": 0.3,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.7,
+       "intra_own": 0.3,
+       "handover": 0.0
+      },
+      {
+       "difficulty": 2,
+       "truncate": true,
+       "intra": 0.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 10.0,
+       "intra_own": 0.3,
+       "handover": 0.0
+      },
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.3,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.7,
+       "intra_own": 0.3,
+       "handover": 0.0
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 10.0,
+       "intra_own": 0.3,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 1,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 1,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 2,
+      "truncate": false,
+      "intra": 0.7,
+      "total": 9.3
+     },
+     {
+      "difficulty": 2,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.9,
+      "total": 9.1
+     },
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ],
+    [
+     {
+      "difficulty": 1,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 1,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 2,
+      "truncate": false,
+      "intra": 0.7,
+      "total": 9.3
+     },
+     {
+      "difficulty": 2,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     },
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.8999999999999999,
+      "total": 9.1
+     },
+     {
+      "difficulty": 3,
+      "truncate": true,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "missing_figure_passes_zero",
+   "note": "Figure 2 is missing (ids 1 and 3): figure 3 receives 0 rather than figure 1's handover.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.8,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.2,
+       "intra_own": 1.0,
+       "handover": 0.8
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "failed_figure_passes_zero",
+   "note": "Figure 2 failed (no scores for the version): it is left as it is and figure 3 receives 0.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.8,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.2,
+       "intra_own": 1.0,
+       "handover": 0.8
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": null
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    null,
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "legacy_version_is_untouched",
+   "note": "Rows without raw components (older versions, F3A) keep their stored intra and total.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.0
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "legacy_figure_between_new_ones",
+   "note": "A figure without raw components is untouched and passes nothing on.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.7,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.3,
+       "intra_own": 1.0,
+       "handover": 0.7
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.7,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.3,
+       "intra_own": 0.5,
+       "handover": 0.2
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.5,
+      "total": 9.5
+     }
+    ]
+   ]
+  },
+  {
+   "name": "repetition_restarts_the_sequence",
+   "note": "The same schedule flown twice: the first figure of the repetition receives 0, not the handover of the last figure of the first run.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.4,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.6,
+       "intra_own": 1.0,
+       "handover": 0.4
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.1,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.9,
+       "intra_own": 0.5,
+       "handover": 0.6
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.3,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.7,
+       "intra_own": 0.8,
+       "handover": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.9,
+      "total": 9.1
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.8,
+      "total": 9.2
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ]
+   ]
+  },
+  {
+   "name": "second_schedule_restarts_the_sequence",
+   "note": "Two schedules in one flight: the first figure of the second receives 0 even though its number follows.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.4,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.6,
+       "intra_own": 1.0,
+       "handover": 0.4
+      }
+     ]
+    },
+    {
+     "schedule": "imac_known",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.1,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.9,
+       "intra_own": 0.5,
+       "handover": 0.6
+      }
+     ]
+    },
+    {
+     "schedule": "imac_unknown",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.3,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.7,
+       "intra_own": 0.8,
+       "handover": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_unknown",
+     "id": 4,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "intra_own": 0.5,
+       "handover": 0.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.9,
+      "total": 9.1
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 0.8,
+      "total": 9.2
+     }
+    ],
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.0,
+      "total": 9.0
+     }
+    ]
+   ]
+  },
+  {
+   "name": "single_figure_sequence",
+   "note": "A sequence of one figure receives 0 and hands nothing on.",
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.9,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.1,
+       "intra_own": 1.2,
+       "handover": 0.7
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     {
+      "difficulty": 3,
+      "truncate": false,
+      "intra": 1.2,
+      "total": 8.8
+     }
+    ]
+   ]
+  }
+ ]
+}
