@@ -78,6 +78,19 @@ class HeightPair(BaseModel):
     out_of_box: float = 0.0  # worst wall breach in the rule's wall unit (degrees for F3A); 0 inside the box
 
 
+class HeightsSource(BaseModel):
+    """What a figure's ``heights`` were derived from (figure boundary heights, provenance).
+
+    Both strings are opaque and produced by ``flightanalysis.layout.heights``. A stored set is
+    used only while both still match: ``figure`` is a fingerprint of the figure's shape that
+    ignores its sizes (applying a pair's ``values`` or its ``combination`` keeps it), and
+    ``deriver`` names the derivation and the layout settings it ran with.
+    """
+
+    figure: str
+    deriver: str
+
+
 class Figure(BaseModel):
     info: ManInfo
     elements: list[PE | int]
@@ -87,6 +100,8 @@ class Figure(BaseModel):
     builder_options: dict[str, str] = {}
     # Feasible (entry, exit) pairs, cheapest first; None: not derived.
     heights: list[HeightPair] | None = None
+    # What ``heights`` were derived from; None: unknown, and the stored pairs are not used.
+    heights_source: HeightsSource | None = None
 
     def at_position(self, position: SequencePosition | None) -> "Figure":
         """A copy of the figure placed at ``position`` in its sequence."""

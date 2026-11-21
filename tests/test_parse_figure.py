@@ -50,3 +50,19 @@ def test_heights_round_trip():
     assert isinstance(opt, Option) and opt.figures[1].heights == pairs
     # at_position keeps the pairs
     assert fig.at_position(None).heights == pairs
+
+
+def test_heights_source_default_none_and_round_trip():
+    from schemas import Height, HeightPair, HeightsSource
+
+    payload = _figure().model_dump(mode="json")
+    payload.pop("heights_source", None)
+    assert parse_figure(payload).heights_source is None
+    source = HeightsSource(figure="f" * 16, deriver="1-abc")
+    fig = _figure().model_copy(update={"heights": [HeightPair(entry=Height.BTM, exit=Height.BTM)],
+                                       "heights_source": source})
+    data = fig.model_dump(mode="json")
+    assert data["heights_source"] == {"figure": "f" * 16, "deriver": "1-abc"}
+    back = parse_figure(data)
+    assert back.heights_source == source
+    assert fig.at_position(None).heights_source == source

@@ -6,6 +6,7 @@ from .ajson import AJson as AJson
 from .aresti import PE as PE
 from .aresti import Figure as Figure
 from .aresti import HeightPair as HeightPair
+from .aresti import HeightsSource as HeightsSource
 from .aresti import NewComparison as NewComparison
 from .aresti import Option as Option
 from .aresti import Sequence as Sequence
