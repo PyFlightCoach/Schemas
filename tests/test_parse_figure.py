@@ -24,3 +24,29 @@ def test_parse_option_payload():
 def test_parse_invalid_still_raises():
     with pytest.raises(Exception):
         parse_figure({"elements": []})
+
+
+def test_heights_default_none_and_old_payload_valid():
+    payload = _figure().model_dump(mode="json")
+    payload.pop("heights", None)
+    assert parse_figure(payload).heights is None
+
+
+def test_heights_round_trip():
+    from schemas import Height, HeightPair
+
+    pairs = [
+        HeightPair(entry=Height.BTM, exit=Height.MID, awkward=True, cost=1.5,
+                   values={"ndmps.loop_radius": 40.0}, combination={"dir": 1}, out_of_box=0.5),
+        HeightPair(entry=Height.MID, exit=Height.MID),
+    ]
+    fig = _figure().model_copy(update={"heights": pairs})
+    data = fig.model_dump(mode="json")
+    assert data["heights"][0]["entry"] == "BTM"
+    back = parse_figure(data)
+    assert back.heights == pairs
+    assert back.heights[1].values == {} and back.heights[1].out_of_box == 0.0
+    opt = parse_figure({"figures": [data, data]})
+    assert isinstance(opt, Option) and opt.figures[1].heights == pairs
+    # at_position keeps the pairs
+    assert fig.at_position(None).heights == pairs

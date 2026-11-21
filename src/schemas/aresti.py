@@ -1,6 +1,7 @@
 from typing import Any, Literal
 
 from schemas.maninfo import ManInfo, SequencePosition, sequence_position
+from schemas.positioning import Height
 
 from .base import CustomBaseModel as BaseModel
 
@@ -65,6 +66,18 @@ class NewComparison(BaseModel):
     like: str
 
 
+class HeightPair(BaseModel):
+    """One (entry, exit) height pair a figure can be flown with, and the sizes that achieve it."""
+
+    entry: Height
+    exit: Height
+    awkward: bool = False  # feasible but silly: the client warns when it is chosen
+    cost: float = 0.0  # soft cost above the figure's cheapest pair
+    values: dict[str, float] = {}  # layout variable keys ("ndmps.loop_radius", "pe.3.length") -> value
+    combination: dict[str, int] = {}  # ndmps Combination name -> option index, where not the first
+    out_of_box: float = 0.0  # worst wall breach in the rule's wall unit (degrees for F3A); 0 inside the box
+
+
 class Figure(BaseModel):
     info: ManInfo
     elements: list[PE | int]
@@ -72,6 +85,8 @@ class Figure(BaseModel):
     ndmps: dict[str, float | int | list | NewComparison]
     relax_back: bool = False
     builder_options: dict[str, str] = {}
+    # Feasible (entry, exit) pairs, cheapest first; None: not derived.
+    heights: list[HeightPair] | None = None
 
     def at_position(self, position: SequencePosition | None) -> "Figure":
         """A copy of the figure placed at ``position`` in its sequence."""
