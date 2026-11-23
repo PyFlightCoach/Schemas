@@ -1,0 +1,1063 @@
+{
+ "version": 1,
+ "description": "Cases for the presentation sequence function, shared by the Python (schemas.presentation) and TypeScript copies. figures: schedule is category_name, scores are the stored rows (null = no analysis). k is a number for every sequence, a map from schedule to K (missing or 0 = no presentation score) or null. expected lists one entry per sequence and score property, ordered by sequence then first appearance of the properties.",
+ "cases": [
+  {
+   "name": "single_sequence",
+   "note": "The score is 10 less the sum of the figures' presentation deductions, with the schedule's K.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.25
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.25
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 2.0,
+     "score": 8.0,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "2": 1.25,
+      "3": 0.25
+     }
+    }
+   ]
+  },
+  {
+   "name": "single_figure_sequence",
+   "note": "One figure is a sequence.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.75
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.75,
+     "score": 9.25,
+     "k": 40,
+     "contributions": {
+      "1": 0.75
+     }
+    }
+   ]
+  },
+  {
+   "name": "every_difficulty_and_truncation_uses_its_own_row",
+   "note": "Rows are matched by difficulty and truncation.",
+   "version": "1.0.0",
+   "k": 30,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 1,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.2
+      },
+      {
+       "difficulty": 1,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.2
+      },
+      {
+       "difficulty": 2,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.4
+      },
+      {
+       "difficulty": 2,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.4
+      },
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.6
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.6
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 1,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.1
+      },
+      {
+       "difficulty": 1,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.1
+      },
+      {
+       "difficulty": 2,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.3
+      },
+      {
+       "difficulty": 2,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.3
+      },
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 1,
+     "truncate": false,
+     "deduction": 0.3,
+     "score": 9.7,
+     "k": 30,
+     "contributions": {
+      "1": 0.2,
+      "2": 0.1
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 1,
+     "truncate": true,
+     "deduction": 0.3,
+     "score": 9.7,
+     "k": 30,
+     "contributions": {
+      "1": 0.2,
+      "2": 0.1
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 2,
+     "truncate": false,
+     "deduction": 0.7,
+     "score": 9.3,
+     "k": 30,
+     "contributions": {
+      "1": 0.4,
+      "2": 0.3
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 2,
+     "truncate": true,
+     "deduction": 0.7,
+     "score": 9.3,
+     "k": 30,
+     "contributions": {
+      "1": 0.4,
+      "2": 0.3
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 1.1,
+     "score": 8.9,
+     "k": 30,
+     "contributions": {
+      "1": 0.6,
+      "2": 0.5
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": true,
+     "deduction": 1.1,
+     "score": 8.9,
+     "k": 30,
+     "contributions": {
+      "1": 0.6,
+      "2": 0.5
+     }
+    }
+   ]
+  },
+  {
+   "name": "truncated_rows_are_not_rounded",
+   "note": "The score is continuous: truncated rows are not rounded to the rules' fixed steps.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.3
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.3
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.35
+      },
+      {
+       "difficulty": 3,
+       "truncate": true,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.35
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.65,
+     "score": 9.35,
+     "k": 40,
+     "contributions": {
+      "1": 0.3,
+      "2": 0.35
+     }
+    },
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": true,
+     "deduction": 0.65,
+     "score": 9.35,
+     "k": 40,
+     "contributions": {
+      "1": 0.3,
+      "2": 0.35
+     }
+    }
+   ]
+  },
+  {
+   "name": "score_is_floored_at_zero",
+   "note": "More than 10 points of deduction leave 0, never a negative score.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 6.0
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 6.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 12.0,
+     "score": 0.0,
+     "k": 40,
+     "contributions": {
+      "1": 6.0,
+      "2": 6.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "missing_figure_adds_nothing",
+   "note": "A figure with no analysis adds nothing, and a gap in the numbers does not end the sequence.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": null
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 4,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 1.5,
+     "score": 8.5,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "4": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "failed_figure_adds_nothing",
+   "note": "A failed figure's row carries presentation 0.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.0,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 0.0,
+       "presentation": 0.0
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.25
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.75,
+     "score": 9.25,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "2": 0.0,
+      "3": 0.25
+     }
+    }
+   ]
+  },
+  {
+   "name": "legacy_version_has_no_score",
+   "note": "Rows without presentation (older versions) give no score.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 1.0,
+       "total": 8.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.5,
+       "total": 9.0
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "f3a_rows_have_no_score",
+   "note": "F3A rows carry their box deduction in positioning and give no score.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "f3a_p25",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 1.5,
+       "total": 8.0
+      }
+     ]
+    },
+    {
+     "schedule": "f3a_p25",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.5,
+       "total": 9.0
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "mixed_definitions_add_up_the_rows_that_have_it",
+   "note": "A figure without presentation adds nothing and is not listed.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 2.0,
+       "total": 7.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 3,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 1.5,
+     "score": 8.5,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "3": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "repetition_gives_a_score_each",
+   "note": "A figure number that does not increase starts the next sequence.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 2.0
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 1.5,
+     "score": 8.5,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "2": 1.0
+     }
+    },
+    {
+     "sequence": 1,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 2.5,
+     "score": 7.5,
+     "k": 40,
+     "contributions": {
+      "1": 2.0,
+      "2": 0.5
+     }
+    }
+   ]
+  },
+  {
+   "name": "second_schedule_has_its_own_score_and_k",
+   "note": "A new schedule starts the next sequence, with its own K.",
+   "version": "1.0.0",
+   "k": {
+    "iac_sportsman": 10,
+    "iac_unlimited": 40
+   },
+   "figures": [
+    {
+     "schedule": "iac_sportsman",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_sportsman",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 2.0
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 1.0,
+     "score": 9.0,
+     "k": 10,
+     "contributions": {
+      "1": 0.5,
+      "2": 0.5
+     }
+    },
+    {
+     "sequence": 1,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 3.0,
+     "score": 7.0,
+     "k": 40,
+     "contributions": {
+      "1": 2.0,
+      "2": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "schedule_without_k_is_left_out",
+   "note": "K empty or 0 means the schedule has no presentation score (Freestyle, unmatched classes).",
+   "version": "1.0.0",
+   "k": {
+    "imac_known": 9,
+    "imac_free": 0
+   },
+   "figures": [
+    {
+     "schedule": "imac_known",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    },
+    {
+     "schedule": "imac_free",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    },
+    {
+     "schedule": "imac_unknown",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 1.0
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.5,
+     "score": 9.5,
+     "k": 9,
+     "contributions": {
+      "1": 0.5
+     }
+    }
+   ]
+  },
+  {
+   "name": "no_k_supplied",
+   "note": "Without a K the scores are returned with k null.",
+   "version": "1.0.0",
+   "k": null,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.5,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.5,
+       "presentation": 0.5
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.5,
+     "score": 9.5,
+     "k": null,
+     "contributions": {
+      "1": 0.5
+     }
+    }
+   ]
+  },
+  {
+   "name": "independent_of_line_handover",
+   "note": "Presentation reads presentation only: the hand-over fields and the intra they rewrite make no difference.",
+   "version": "1.0.0",
+   "k": 40,
+   "figures": [
+    {
+     "schedule": "iac_unlimited",
+     "id": 1,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 1.4,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 8.6,
+       "presentation": 0.5,
+       "intra_own": 1.0,
+       "handover": 0.4
+      }
+     ]
+    },
+    {
+     "schedule": "iac_unlimited",
+     "id": 2,
+     "scores": [
+      {
+       "difficulty": 3,
+       "truncate": false,
+       "intra": 0.8,
+       "inter": 0.0,
+       "positioning": 0.0,
+       "total": 9.2,
+       "presentation": 0.25,
+       "intra_own": 0.5,
+       "handover": 0.3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    {
+     "sequence": 0,
+     "difficulty": 3,
+     "truncate": false,
+     "deduction": 0.75,
+     "score": 9.25,
+     "k": 40,
+     "contributions": {
+      "1": 0.5,
+      "2": 0.25
+     }
+    }
+   ]
+  }
+ ]
+}
