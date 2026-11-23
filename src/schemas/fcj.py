@@ -166,6 +166,12 @@ class ScoreValues(BaseModel):
     # once the sequence function (schemas.handover) has run. Missing in older versions.
     intra_own: float | None = None
     handover: float | None = None
+    # Written by analysis versions whose rule set scores box placement once per sequence (IAC,
+    # CIVA, IMAC): the figure's box deduction at this row's difficulty, untruncated. `positioning`
+    # is then 0 and `total` excludes it, so ``total = max(10 - intra - inter - positioning, 0)``
+    # still holds. The sequence function (schemas.presentation) adds it up. Missing in older
+    # versions and F3A, whose figures carry their box deduction in `positioning`.
+    presentation: float | None = None
 
 
 class ScoreProperties(BaseModel):
