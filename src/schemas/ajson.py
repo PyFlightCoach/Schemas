@@ -8,6 +8,7 @@ import pandas as pd
 from packaging.version import InvalidVersion, Version
 
 from schemas import fcj
+from schemas.presentation import KFactor, PresentationScore, presentation_scores
 from schemas.ma import MA, FAVersion
 from schemas.sinfo import ScheduleInfo
 from schemas.utils.files import validate_json
@@ -144,6 +145,13 @@ class AJson(BaseModel):
             .multiply(self.k_factors, axis=0)
             .sum(axis=0)
         )
+
+    def presentation_scores(
+        self, version: str, k: KFactor = None
+    ) -> list[PresentationScore]:
+        """The sequence-level presentation scores of `version`, empty for versions and rule sets
+        without one (see schemas.presentation)."""
+        return presentation_scores(self.mans, version, k)
 
     def check_version(self, version: str):
         version = version.removeprefix("v")

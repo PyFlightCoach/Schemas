@@ -124,6 +124,18 @@ def presentation_scores(
     return out
 
 
+def describe(scores: Sequence[PresentationScore]) -> list[str]:
+    """One line per sequence for logs and reports, for the default difficulty untruncated. The
+    rule's own name for the score ("Presentation", "Positioning", "Airspace Control") is in the
+    rule set metadata, not in the rows."""
+    return [
+        f"sequence {s.sequence + 1} ({s.schedule.category} {s.schedule.name}): "
+        f"presentation {s.score:.2f}, deduction {s.deduction:.2f}"
+        + (f", K {s.k:g}, weighted {s.weighted:.2f}" if s.k else "")
+        for s in get_presentation(scores)
+    ]
+
+
 def get_presentation(
     scores: Sequence[PresentationScore], props: ScoreProperties | None = None
 ) -> list[PresentationScore]:

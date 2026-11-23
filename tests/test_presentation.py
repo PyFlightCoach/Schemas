@@ -138,3 +138,17 @@ def test_split_sequences_by_schedule_and_figure_number():
 def test_presentation_score_clamps():
     assert presentation_score(0) == 10
     assert presentation_score(10.5) == 0
+
+
+def test_ajson_and_describe_report_each_sequence():
+    from schemas import AJson
+    from schemas.presentation import describe
+
+    case = next(c for c in CASES if c["name"] == "second_schedule_has_its_own_score_and_k")
+    ajson = AJson(isComp=False, mans=[make_ma(f, case["version"]) for f in case["figures"]])
+    scores = ajson.presentation_scores(case["version"], k_argument(case["k"]))
+    assert len(scores) == 2
+    lines = describe(scores)
+    assert lines[0].startswith("sequence 1 (iac sportsman): presentation 9.00") and "K 10" in lines[0]
+    assert lines[1].startswith("sequence 2 (iac unlimited): presentation 7.00") and "weighted 280.00" in lines[1]
+    assert describe([]) == []
